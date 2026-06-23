@@ -1,0 +1,2007 @@
+{
+  "generated_at" : "2024-07-27T10:00:00Z",
+  "business_name" : "Filament Bar (Baner)",
+  "base_package" : "com.filamentbarbaner",
+  "project_dependencies" : {
+    "spring_boot_starters" : [ "web", "data-jpa", "security", "validation", "actuator", "lombok", "mail" ],
+    "npm_packages" : [ "@tanstack/react-query", "react-hook-form", "zod", "axios", "react-router-dom", "clsx", "date-fns", "@radix-ui/react-dialog", "@radix-ui/react-label", "@radix-ui/react-select", "@radix-ui/react-toast" ]
+  },
+  "files" : [ {
+    "file_name" : "User.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/User.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Represents a user entity for authentication and authorization.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Primary key, generated automatically."
+    }, {
+      "name" : "email",
+      "type" : "String",
+      "description" : "User's email address, used for login. Must be unique and not null."
+    }, {
+      "name" : "passwordHash",
+      "type" : "String",
+      "description" : "BCrypt-hashed password. Not null."
+    }, {
+      "name" : "role",
+      "type" : "Role",
+      "description" : "User's role (ADMIN or CUSTOMER). Not null."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/Role.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "MODEL layer - Defines the User data structure for persistence in the database, including fields for authentication (email, password) and authorization (role)."
+  }, {
+    "file_name" : "Role.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/Role.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Enumeration for user roles within the application.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "ADMIN",
+      "type" : "enum",
+      "description" : "Administrator role with full access."
+    }, {
+      "name" : "CUSTOMER",
+      "type" : "enum",
+      "description" : "Default role for general users (future use)."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "MODEL layer - A standalone enum defining the authorization roles (ADMIN, CUSTOMER) used by the User entity and Spring Security configuration."
+  }, {
+    "file_name" : "UserRepository.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java",
+    "file_type" : "BACKEND",
+    "layer" : "REPOSITORY",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "JPA repository for User entities.",
+    "public_functions" : [ {
+      "name" : "findByEmail",
+      "parameters" : [ "String email" ],
+      "return_type" : "Optional<User>",
+      "description" : "Finds a user by their unique email address."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/User.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "REPOSITORY layer - Provides data access methods for the User entity. Its primary public method is findByEmail(String): Optional<User>, used by the UserService for authentication."
+  }, {
+    "file_name" : "UserService.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/service/UserService.java",
+    "file_type" : "BACKEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for user-related operations, implementing Spring Security's UserDetailsService.",
+    "public_functions" : [ {
+      "name" : "loadUserByUsername",
+      "parameters" : [ "String email" ],
+      "return_type" : "UserDetails",
+      "description" : "Loads a user by email for Spring Security authentication."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java" ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "SERVICE layer - Implements Spring Security's UserDetailsService to integrate user data with the authentication manager. Its core method is loadUserByUsername(String email): UserDetails."
+  }, {
+    "file_name" : "AdminInitializer.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/config/AdminInitializer.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONFIG",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Initializes the default admin user on application startup if one doesn't exist.",
+    "public_functions" : [ {
+      "name" : "run",
+      "parameters" : [ "String... args" ],
+      "return_type" : "void",
+      "description" : "Checks for an admin user and creates one using environment variables if not found."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java", "backend/src/main/java/com/filamentbarbaner/model/User.java", "backend/src/main/java/com/filamentbarbaner/model/Role.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java" ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "CONFIG layer - A CommandLineRunner that ensures a default ADMIN user exists on startup, creating one from environment variables (${admin.email}, ${admin.password}) if the database is empty."
+  }, {
+    "file_name" : "GlobalExceptionHandler.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/exception/GlobalExceptionHandler.java",
+    "file_type" : "BACKEND",
+    "layer" : "EXCEPTION",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Centralized exception handling for the application.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/dto/ErrorResponse.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "EXCEPTION layer - A @RestControllerAdvice class that catches exceptions across all controllers and formats them into a consistent ErrorResponse DTO for the client."
+  }, {
+    "file_name" : "ErrorResponse.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/ErrorResponse.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Standardized DTO for returning error details to the client.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "timestamp",
+      "type" : "LocalDateTime",
+      "description" : "The time the error occurred."
+    }, {
+      "name" : "status",
+      "type" : "int",
+      "description" : "The HTTP status code."
+    }, {
+      "name" : "error",
+      "type" : "String",
+      "description" : "The HTTP status message."
+    }, {
+      "name" : "message",
+      "type" : "String",
+      "description" : "A developer-friendly error message."
+    }, {
+      "name" : "path",
+      "type" : "String",
+      "description" : "The request path where the error occurred."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-core",
+    "file_role" : "DTO layer - A record defining the standard JSON structure for all API error responses, used by the GlobalExceptionHandler."
+  }, {
+    "file_name" : "AuthController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/AuthController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Controller for handling user authentication.",
+    "public_functions" : [ {
+      "name" : "login",
+      "parameters" : [ "AuthRequest authRequest" ],
+      "return_type" : "ResponseEntity<AuthResponse>",
+      "description" : "Authenticates a user and returns a JWT."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/auth/login",
+      "request_body" : "AuthRequest",
+      "response_body" : "AuthResponse",
+      "description" : "Authenticates user credentials and returns a JWT token, role, and expiration."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/dto/AuthRequest.java", "backend/src/main/java/com/filamentbarbaner/dto/AuthResponse.java", "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java" ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "CONTROLLER layer - Exposes the public authentication endpoint. Its primary method login(AuthRequest) handles POST /api/v1/auth/login requests."
+  }, {
+    "file_name" : "AuthRequest.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/AuthRequest.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for authentication requests.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "email",
+      "type" : "String",
+      "description" : "User's email. Must be a valid email format and not blank."
+    }, {
+      "name" : "password",
+      "type" : "String",
+      "description" : "User's password. Must not be blank."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "DTO layer - A record defining the request body for the login endpoint, with @NotBlank and @Email validation annotations."
+  }, {
+    "file_name" : "AuthResponse.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/AuthResponse.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for authentication responses.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "token",
+      "type" : "String",
+      "description" : "The generated JWT."
+    }, {
+      "name" : "role",
+      "type" : "String",
+      "description" : "The user's role (e.g., 'ADMIN')."
+    }, {
+      "name" : "expiresAt",
+      "type" : "long",
+      "description" : "Token expiration timestamp in epoch milliseconds."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "DTO layer - A record defining the successful JSON response for the login endpoint, containing the JWT and user metadata."
+  }, {
+    "file_name" : "JwtUtil.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java",
+    "file_type" : "BACKEND",
+    "layer" : "UTIL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Utility class for handling JWT operations.",
+    "public_functions" : [ {
+      "name" : "generateToken",
+      "parameters" : [ "UserDetails userDetails" ],
+      "return_type" : "String",
+      "description" : "Generates a JWT for a given user."
+    }, {
+      "name" : "validateToken",
+      "parameters" : [ "String token", "UserDetails userDetails" ],
+      "return_type" : "boolean",
+      "description" : "Validates a JWT."
+    }, {
+      "name" : "extractEmail",
+      "parameters" : [ "String token" ],
+      "return_type" : "String",
+      "description" : "Extracts the email (subject) from a JWT."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "UTIL layer - Provides stateless, static methods for JWT management. Key public methods are generateToken(UserDetails), validateToken(String, UserDetails), and extractEmail(String)."
+  }, {
+    "file_name" : "JwtAuthFilter.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/security/JwtAuthFilter.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONFIG",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "A filter that intercepts requests to validate JWTs.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java", "backend/src/main/java/com/filamentbarbaner/service/UserService.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java", "backend/src/main/java/com/filamentbarbaner/service/UserService.java" ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "CONFIG layer - A Spring Security OncePerRequestFilter that validates the 'Authorization: Bearer' token on incoming requests and sets the SecurityContextHolder."
+  }, {
+    "file_name" : "SecurityConfig.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/config/SecurityConfig.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONFIG",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Spring Security configuration for the application.",
+    "public_functions" : [ {
+      "name" : "securityFilterChain",
+      "parameters" : [ "HttpSecurity http" ],
+      "return_type" : "SecurityFilterChain",
+      "description" : "Configures HTTP security, including CORS, CSRF, session management, and authorization rules."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/security/JwtAuthFilter.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/security/JwtAuthFilter.java" ],
+    "feature_name" : "shared-backend-auth",
+    "file_role" : "CONFIG layer - Defines the core security policy, including public routes (GET /api/v1/**, POST /api/v1/auth/login, POST /api/v1/reservations), protected admin routes (/api/v1/admin/**), and registers the JwtAuthFilter."
+  }, {
+    "file_name" : "MenuItem.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/MenuItem.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Represents a single item on the bar's menu.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Primary key."
+    }, {
+      "name" : "name",
+      "type" : "String",
+      "description" : "Name of the menu item. Not null, max 255 chars."
+    }, {
+      "name" : "description",
+      "type" : "String",
+      "description" : "Description of the item. Can be long text."
+    }, {
+      "name" : "price",
+      "type" : "BigDecimal",
+      "description" : "Price of the item. Not null, positive value."
+    }, {
+      "name" : "category",
+      "type" : "MenuItemCategory",
+      "description" : "Category of the item (e.g., COCKTAIL, APPETIZER). Not null."
+    }, {
+      "name" : "imageUrl",
+      "type" : "String",
+      "description" : "URL to an image of the item. Optional."
+    }, {
+      "name" : "isAvailable",
+      "type" : "boolean",
+      "description" : "Flag to indicate if the item is currently available. Defaults to true."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "menu-management-core",
+    "file_role" : "MODEL layer - Defines the MenuItem data structure for persistence, including fields like name, price, and category. It imports the MenuItemCategory enum."
+  }, {
+    "file_name" : "MenuItemCategory.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Enumeration for menu item categories.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "COCKTAILS",
+      "type" : "enum",
+      "description" : "Category for cocktails."
+    }, {
+      "name" : "MOCKTAILS",
+      "type" : "enum",
+      "description" : "Category for non-alcoholic cocktails."
+    }, {
+      "name" : "APPETIZERS",
+      "type" : "enum",
+      "description" : "Category for appetizers and small plates."
+    }, {
+      "name" : "MAIN_COURSE",
+      "type" : "enum",
+      "description" : "Category for main dishes."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "menu-management-core",
+    "file_role" : "MODEL layer - A standalone enum defining the categories for menu items, used by the MenuItem entity to classify products."
+  }, {
+    "file_name" : "MenuItemRepository.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/repository/MenuItemRepository.java",
+    "file_type" : "BACKEND",
+    "layer" : "REPOSITORY",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "JPA repository for MenuItem entities.",
+    "public_functions" : [ {
+      "name" : "findByCategory",
+      "parameters" : [ "MenuItemCategory category" ],
+      "return_type" : "List<MenuItem>",
+      "description" : "Finds all menu items belonging to a specific category."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/MenuItem.java", "backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "menu-management-core",
+    "file_role" : "REPOSITORY layer - Provides data access methods for MenuItem entities, including standard CRUD and a custom findByCategory(MenuItemCategory) method."
+  }, {
+    "file_name" : "MenuService.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/service/MenuService.java",
+    "file_type" : "BACKEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service layer for menu-related business logic.",
+    "public_functions" : [ {
+      "name" : "getAllMenuItems",
+      "parameters" : [ "Optional<MenuItemCategory> category" ],
+      "return_type" : "List<MenuItemDto>",
+      "description" : "Retrieves all menu items, optionally filtered by category."
+    }, {
+      "name" : "createMenuItem",
+      "parameters" : [ "MenuItemDto menuItemDto" ],
+      "return_type" : "MenuItemDto",
+      "description" : "Creates a new menu item."
+    }, {
+      "name" : "updateMenuItem",
+      "parameters" : [ "UUID id", "MenuItemDto menuItemDto" ],
+      "return_type" : "Optional<MenuItemDto>",
+      "description" : "Updates an existing menu item."
+    }, {
+      "name" : "deleteMenuItem",
+      "parameters" : [ "UUID id" ],
+      "return_type" : "void",
+      "description" : "Deletes a menu item by its ID."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/repository/MenuItemRepository.java", "backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/repository/MenuItemRepository.java" ],
+    "feature_name" : "menu-management-core",
+    "file_role" : "SERVICE layer - Implements business logic for menu management. Key public methods are getAllMenuItems(...), createMenuItem(MenuItemDto), updateMenuItem(UUID, MenuItemDto), and deleteMenuItem(UUID)."
+  }, {
+    "file_name" : "MenuController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/MenuController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Public-facing REST controller for accessing menu data.",
+    "public_functions" : [ {
+      "name" : "getMenuItems",
+      "parameters" : [ "Optional<MenuItemCategory> category" ],
+      "return_type" : "ResponseEntity<List<MenuItemDto>>",
+      "description" : "Handles requests to get menu items."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/menu-items",
+      "request_body" : null,
+      "response_body" : "List<MenuItemDto>",
+      "description" : "Retrieves all available menu items, with an optional 'category' query parameter for filtering."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/MenuService.java", "backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/MenuService.java" ],
+    "feature_name" : "menu-management-api",
+    "file_role" : "CONTROLLER layer - Exposes the public, read-only menu API. Its primary method getMenuItems(...) handles GET /api/v1/menu-items requests."
+  }, {
+    "file_name" : "AdminMenuController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/AdminMenuController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin-only REST controller for managing menu items.",
+    "public_functions" : [ {
+      "name" : "createMenuItem",
+      "parameters" : [ "MenuItemDto menuItemDto" ],
+      "return_type" : "ResponseEntity<MenuItemDto>",
+      "description" : "Creates a new menu item."
+    }, {
+      "name" : "updateMenuItem",
+      "parameters" : [ "UUID id", "MenuItemDto menuItemDto" ],
+      "return_type" : "ResponseEntity<MenuItemDto>",
+      "description" : "Updates an existing menu item."
+    }, {
+      "name" : "deleteMenuItem",
+      "parameters" : [ "UUID id" ],
+      "return_type" : "ResponseEntity<Void>",
+      "description" : "Deletes a menu item."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/admin/menu-items",
+      "request_body" : "MenuItemDto",
+      "response_body" : "MenuItemDto",
+      "description" : "Creates a new menu item. Requires ADMIN role."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/menu-items/{id}",
+      "request_body" : "MenuItemDto",
+      "response_body" : "MenuItemDto",
+      "description" : "Updates an existing menu item. Requires ADMIN role."
+    }, {
+      "method" : "DELETE",
+      "path" : "/api/v1/admin/menu-items/{id}",
+      "request_body" : null,
+      "response_body" : "204 No Content",
+      "description" : "Deletes a menu item. Requires ADMIN role."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/MenuService.java", "backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/MenuService.java" ],
+    "feature_name" : "menu-management-api",
+    "file_role" : "CONTROLLER layer - Exposes the protected CRUD endpoints for menu management under /api/v1/admin/menu-items. All methods are secured with @PreAuthorize(\"hasRole('ADMIN')\")."
+  }, {
+    "file_name" : "MenuItemDto.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for transferring menu item data.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Item ID. Null for creation."
+    }, {
+      "name" : "name",
+      "type" : "String",
+      "description" : "Item name. @NotBlank."
+    }, {
+      "name" : "description",
+      "type" : "String",
+      "description" : "Item description."
+    }, {
+      "name" : "price",
+      "type" : "BigDecimal",
+      "description" : "Item price. @NotNull @Positive."
+    }, {
+      "name" : "category",
+      "type" : "MenuItemCategory",
+      "description" : "Item category. @NotNull."
+    }, {
+      "name" : "imageUrl",
+      "type" : "String",
+      "description" : "URL for the item's image."
+    }, {
+      "name" : "isAvailable",
+      "type" : "boolean",
+      "description" : "Availability status."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "menu-management-api",
+    "file_role" : "DTO layer - A record defining the data transfer object for MenuItem, used as the request and response body for both public and admin menu controllers."
+  }, {
+    "file_name" : "Reservation.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/Reservation.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Represents a table reservation.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Primary key."
+    }, {
+      "name" : "customerName",
+      "type" : "String",
+      "description" : "Name of the person making the reservation. Not null."
+    }, {
+      "name" : "customerEmail",
+      "type" : "String",
+      "description" : "Email of the person making the reservation. Not null."
+    }, {
+      "name" : "customerPhone",
+      "type" : "String",
+      "description" : "Phone number of the person making the reservation. Not null."
+    }, {
+      "name" : "reservationTime",
+      "type" : "LocalDateTime",
+      "description" : "Date and time of the reservation. Not null."
+    }, {
+      "name" : "numberOfGuests",
+      "type" : "int",
+      "description" : "Number of guests for the reservation. Not null, positive."
+    }, {
+      "name" : "status",
+      "type" : "ReservationStatus",
+      "description" : "Current status of the reservation (e.g., PENDING, CONFIRMED). Not null."
+    }, {
+      "name" : "specialRequests",
+      "type" : "String",
+      "description" : "Any special requests from the customer. Optional."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "reservation-system-core",
+    "file_role" : "MODEL layer - Defines the Reservation data structure for persistence, including customer details, time, and status. It imports the ReservationStatus enum."
+  }, {
+    "file_name" : "ReservationStatus.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Enumeration for reservation statuses.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "PENDING",
+      "type" : "enum",
+      "description" : "Reservation has been requested but not yet confirmed."
+    }, {
+      "name" : "CONFIRMED",
+      "type" : "enum",
+      "description" : "Reservation has been confirmed by staff."
+    }, {
+      "name" : "CANCELLED",
+      "type" : "enum",
+      "description" : "Reservation has been cancelled."
+    }, {
+      "name" : "COMPLETED",
+      "type" : "enum",
+      "description" : "The guest has attended the reservation."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "reservation-system-core",
+    "file_role" : "MODEL layer - A standalone enum defining the lifecycle statuses for a reservation, used by the Reservation entity."
+  }, {
+    "file_name" : "ReservationRepository.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java",
+    "file_type" : "BACKEND",
+    "layer" : "REPOSITORY",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "JPA repository for Reservation entities.",
+    "public_functions" : [ {
+      "name" : "findByReservationTimeBetween",
+      "parameters" : [ "LocalDateTime start", "LocalDateTime end" ],
+      "return_type" : "List<Reservation>",
+      "description" : "Finds all reservations within a given time range."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/Reservation.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "reservation-system-core",
+    "file_role" : "REPOSITORY layer - Provides data access methods for Reservation entities, including standard CRUD and a custom findByReservationTimeBetween(...) method for querying by date."
+  }, {
+    "file_name" : "ReservationService.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java",
+    "file_type" : "BACKEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service layer for reservation business logic.",
+    "public_functions" : [ {
+      "name" : "createReservation",
+      "parameters" : [ "CreateReservationRequest request" ],
+      "return_type" : "ReservationResponse",
+      "description" : "Creates a new reservation and sends a confirmation email."
+    }, {
+      "name" : "getAllReservations",
+      "parameters" : [ ],
+      "return_type" : "List<ReservationResponse>",
+      "description" : "Retrieves all reservations for admin view."
+    }, {
+      "name" : "updateReservationStatus",
+      "parameters" : [ "UUID id", "ReservationStatus status" ],
+      "return_type" : "Optional<ReservationResponse>",
+      "description" : "Updates the status of an existing reservation."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java", "backend/src/main/java/com/filamentbarbaner/dto/CreateReservationRequest.java", "backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java" ],
+    "feature_name" : "reservation-system-core",
+    "file_role" : "SERVICE layer - Implements business logic for reservations. Key methods include createReservation(CreateReservationRequest), getAllReservations(), and updateReservationStatus(UUID, ReservationStatus)."
+  }, {
+    "file_name" : "ReservationController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/ReservationController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Public-facing REST controller for creating reservations.",
+    "public_functions" : [ {
+      "name" : "submitReservation",
+      "parameters" : [ "CreateReservationRequest request" ],
+      "return_type" : "ResponseEntity<ReservationResponse>",
+      "description" : "Handles new reservation requests."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/reservations",
+      "request_body" : "CreateReservationRequest",
+      "response_body" : "ReservationResponse",
+      "description" : "Submits a new table reservation request."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java", "backend/src/main/java/com/filamentbarbaner/dto/CreateReservationRequest.java", "backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java" ],
+    "feature_name" : "reservation-system-api",
+    "file_role" : "CONTROLLER layer - Exposes the public endpoint for creating reservations. Its primary method submitReservation(...) handles POST /api/v1/reservations requests."
+  }, {
+    "file_name" : "AdminReservationController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/AdminReservationController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin-only REST controller for managing reservations.",
+    "public_functions" : [ {
+      "name" : "getAllReservations",
+      "parameters" : [ ],
+      "return_type" : "ResponseEntity<List<ReservationResponse>>",
+      "description" : "Gets all reservations."
+    }, {
+      "name" : "updateReservationStatus",
+      "parameters" : [ "UUID id", "ReservationStatus status" ],
+      "return_type" : "ResponseEntity<ReservationResponse>",
+      "description" : "Updates a reservation's status."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/admin/reservations",
+      "request_body" : null,
+      "response_body" : "List<ReservationResponse>",
+      "description" : "Retrieves all reservations. Requires ADMIN role."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/reservations/{id}/status",
+      "request_body" : "{ \"status\": \"CONFIRMED\" }",
+      "response_body" : "ReservationResponse",
+      "description" : "Updates the status of a reservation (e.g., to confirm or cancel). Requires ADMIN role."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java", "backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java" ],
+    "feature_name" : "reservation-system-api",
+    "file_role" : "CONTROLLER layer - Exposes protected endpoints for viewing and managing reservations under /api/v1/admin/reservations. All methods are secured with @PreAuthorize(\"hasRole('ADMIN')\")."
+  }, {
+    "file_name" : "CreateReservationRequest.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/CreateReservationRequest.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for creating a new reservation.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "customerName",
+      "type" : "String",
+      "description" : "Customer's name. @NotBlank."
+    }, {
+      "name" : "customerEmail",
+      "type" : "String",
+      "description" : "Customer's email. @NotBlank @Email."
+    }, {
+      "name" : "customerPhone",
+      "type" : "String",
+      "description" : "Customer's phone number. @NotBlank."
+    }, {
+      "name" : "reservationTime",
+      "type" : "LocalDateTime",
+      "description" : "Requested date and time. @NotNull @Future."
+    }, {
+      "name" : "numberOfGuests",
+      "type" : "int",
+      "description" : "Number of guests. @Min(1)."
+    }, {
+      "name" : "specialRequests",
+      "type" : "String",
+      "description" : "Optional special requests."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "reservation-system-api",
+    "file_role" : "DTO layer - A record defining the request body for the public reservation creation endpoint, with validation annotations for all fields."
+  }, {
+    "file_name" : "ReservationResponse.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for returning reservation data.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Reservation ID."
+    }, {
+      "name" : "customerName",
+      "type" : "String",
+      "description" : "Customer's name."
+    }, {
+      "name" : "customerEmail",
+      "type" : "String",
+      "description" : "Customer's email."
+    }, {
+      "name" : "customerPhone",
+      "type" : "String",
+      "description" : "Customer's phone number."
+    }, {
+      "name" : "reservationTime",
+      "type" : "LocalDateTime",
+      "description" : "Date and time of reservation."
+    }, {
+      "name" : "numberOfGuests",
+      "type" : "int",
+      "description" : "Number of guests."
+    }, {
+      "name" : "status",
+      "type" : "ReservationStatus",
+      "description" : "Current status."
+    }, {
+      "name" : "specialRequests",
+      "type" : "String",
+      "description" : "Special requests."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "reservation-system-api",
+    "file_role" : "DTO layer - A record defining the JSON response for reservation-related endpoints, providing a safe representation of the Reservation entity."
+  }, {
+    "file_name" : "Event.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/model/Event.java",
+    "file_type" : "BACKEND",
+    "layer" : "MODEL",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Represents a special event held at the bar.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Primary key."
+    }, {
+      "name" : "name",
+      "type" : "String",
+      "description" : "Name of the event. Not null."
+    }, {
+      "name" : "description",
+      "type" : "String",
+      "description" : "Description of the event. Long text."
+    }, {
+      "name" : "eventDate",
+      "type" : "LocalDate",
+      "description" : "Date of the event. Not null."
+    }, {
+      "name" : "startTime",
+      "type" : "LocalTime",
+      "description" : "Start time of the event. Not null."
+    }, {
+      "name" : "imageUrl",
+      "type" : "String",
+      "description" : "URL for a promotional image. Optional."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "event-management",
+    "file_role" : "MODEL layer - Defines the Event data structure for persistence, including fields for the event's name, date, time, and description."
+  }, {
+    "file_name" : "EventRepository.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/repository/EventRepository.java",
+    "file_type" : "BACKEND",
+    "layer" : "REPOSITORY",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "JPA repository for Event entities.",
+    "public_functions" : [ {
+      "name" : "findAllByEventDateAfter",
+      "parameters" : [ "LocalDate date" ],
+      "return_type" : "List<Event>",
+      "description" : "Finds all upcoming events after a given date."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/model/Event.java" ],
+    "depends_on" : [ ],
+    "feature_name" : "event-management",
+    "file_role" : "REPOSITORY layer - Provides data access methods for Event entities, including a custom findAllByEventDateAfter(LocalDate) method to fetch upcoming events."
+  }, {
+    "file_name" : "EventService.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/service/EventService.java",
+    "file_type" : "BACKEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service layer for event-related business logic.",
+    "public_functions" : [ {
+      "name" : "getUpcomingEvents",
+      "parameters" : [ ],
+      "return_type" : "List<EventDto>",
+      "description" : "Retrieves all future events."
+    }, {
+      "name" : "createEvent",
+      "parameters" : [ "EventDto eventDto" ],
+      "return_type" : "EventDto",
+      "description" : "Creates a new event."
+    }, {
+      "name" : "updateEvent",
+      "parameters" : [ "UUID id", "EventDto eventDto" ],
+      "return_type" : "Optional<EventDto>",
+      "description" : "Updates an existing event."
+    }, {
+      "name" : "deleteEvent",
+      "parameters" : [ "UUID id" ],
+      "return_type" : "void",
+      "description" : "Deletes an event."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/repository/EventRepository.java", "backend/src/main/java/com/filamentbarbaner/dto/EventDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/repository/EventRepository.java" ],
+    "feature_name" : "event-management",
+    "file_role" : "SERVICE layer - Implements business logic for events. Key methods are getUpcomingEvents(), createEvent(EventDto), updateEvent(UUID, EventDto), and deleteEvent(UUID)."
+  }, {
+    "file_name" : "EventController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/EventController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Public-facing REST controller for accessing event data.",
+    "public_functions" : [ {
+      "name" : "getUpcomingEvents",
+      "parameters" : [ ],
+      "return_type" : "ResponseEntity<List<EventDto>>",
+      "description" : "Handles requests to get upcoming events."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/events",
+      "request_body" : null,
+      "response_body" : "List<EventDto>",
+      "description" : "Retrieves all upcoming events."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/EventService.java", "backend/src/main/java/com/filamentbarbaner/dto/EventDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/EventService.java" ],
+    "feature_name" : "event-management",
+    "file_role" : "CONTROLLER layer - Exposes the public, read-only events API. Its primary method getUpcomingEvents() handles GET /api/v1/events requests."
+  }, {
+    "file_name" : "AdminEventController.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/controller/AdminEventController.java",
+    "file_type" : "BACKEND",
+    "layer" : "CONTROLLER",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin-only REST controller for managing events.",
+    "public_functions" : [ {
+      "name" : "createEvent",
+      "parameters" : [ "EventDto eventDto" ],
+      "return_type" : "ResponseEntity<EventDto>",
+      "description" : "Creates a new event."
+    }, {
+      "name" : "updateEvent",
+      "parameters" : [ "UUID id", "EventDto eventDto" ],
+      "return_type" : "ResponseEntity<EventDto>",
+      "description" : "Updates an existing event."
+    }, {
+      "name" : "deleteEvent",
+      "parameters" : [ "UUID id" ],
+      "return_type" : "ResponseEntity<Void>",
+      "description" : "Deletes an event."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/admin/events",
+      "request_body" : "EventDto",
+      "response_body" : "EventDto",
+      "description" : "Creates a new event. Requires ADMIN role."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/events/{id}",
+      "request_body" : "EventDto",
+      "response_body" : "EventDto",
+      "description" : "Updates an existing event. Requires ADMIN role."
+    }, {
+      "method" : "DELETE",
+      "path" : "/api/v1/admin/events/{id}",
+      "request_body" : null,
+      "response_body" : "204 No Content",
+      "description" : "Deletes an event. Requires ADMIN role."
+    } ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "backend/src/main/java/com/filamentbarbaner/service/EventService.java", "backend/src/main/java/com/filamentbarbaner/dto/EventDto.java" ],
+    "depends_on" : [ "backend/src/main/java/com/filamentbarbaner/service/EventService.java" ],
+    "feature_name" : "event-management",
+    "file_role" : "CONTROLLER layer - Exposes protected CRUD endpoints for event management under /api/v1/admin/events. All methods are secured with @PreAuthorize(\"hasRole('ADMIN')\")."
+  }, {
+    "file_name" : "EventDto.java",
+    "file_path" : "backend/src/main/java/com/filamentbarbaner/dto/EventDto.java",
+    "file_type" : "BACKEND",
+    "layer" : "DTO",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "DTO for transferring event data.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "id",
+      "type" : "UUID",
+      "description" : "Event ID. Null for creation."
+    }, {
+      "name" : "name",
+      "type" : "String",
+      "description" : "Event name. @NotBlank."
+    }, {
+      "name" : "description",
+      "type" : "String",
+      "description" : "Event description. @NotBlank."
+    }, {
+      "name" : "eventDate",
+      "type" : "LocalDate",
+      "description" : "Date of the event. @NotNull @FutureOrPresent."
+    }, {
+      "name" : "startTime",
+      "type" : "LocalTime",
+      "description" : "Start time of the event. @NotNull."
+    }, {
+      "name" : "imageUrl",
+      "type" : "String",
+      "description" : "URL for the event's image."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "event-management",
+    "file_role" : "DTO layer - A record defining the data transfer object for Event, used as the request and response body for both public and admin event controllers."
+  }, {
+    "file_name" : "client.ts",
+    "file_path" : "frontend/src/api/client.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Configures and exports a singleton Axios instance for all API calls.",
+    "public_functions" : [ ],
+    "public_variables" : [ {
+      "name" : "apiClient",
+      "type" : "AxiosInstance",
+      "description" : "The configured Axios instance."
+    } ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "SERVICE layer - Creates and exports a singleton Axios instance. It configures the baseURL from VITE_API_URL and adds an interceptor to inject the JWT 'Authorization' header."
+  }, {
+    "file_name" : "App.tsx",
+    "file_path" : "frontend/src/App.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "The root component of the application, setting up providers and routing.",
+    "public_functions" : [ {
+      "name" : "App",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Main application component."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/pages/HomePage.tsx", "frontend/src/pages/MenuPage.tsx", "frontend/src/pages/ReservationPage.tsx", "frontend/src/pages/EventsPage.tsx", "frontend/src/pages/ContactPage.tsx", "frontend/src/pages/LoginPage.tsx", "frontend/src/pages/AdminDashboardPage.tsx", "frontend/src/context/AuthContext.tsx", "frontend/src/components/ProtectedRoute.tsx" ],
+    "depends_on" : [ "frontend/src/context/AuthContext.tsx" ],
+    "feature_name" : "core-ui",
+    "file_role" : "PAGE layer - The application's entry point, responsible for setting up the main context providers (QueryClientProvider, AuthProvider) and defining all application routes using react-router-dom."
+  }, {
+    "file_name" : "Layout.tsx",
+    "file_path" : "frontend/src/components/Layout.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "COMPONENT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Main layout component with a shared header and footer.",
+    "public_functions" : [ {
+      "name" : "Layout",
+      "parameters" : [ "{ children: React.ReactNode }" ],
+      "return_type" : "JSX.Element",
+      "description" : "Wraps page content with common UI elements."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/components/Header.tsx", "frontend/src/components/Footer.tsx", "frontend/src/components/Seo.tsx" ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "COMPONENT layer - Provides the consistent page structure for the application, rendering the Header, Footer, and an SEO component around the main page content."
+  }, {
+    "file_name" : "Header.tsx",
+    "file_path" : "frontend/src/components/Header.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "COMPONENT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Application header with navigation links. Uses a dark theme bg-[#1A1A1A] with accent text-[#FFB800] for active links.",
+    "public_functions" : [ {
+      "name" : "Header",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the main navigation bar."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "COMPONENT layer - Renders the site-wide navigation bar, including the logo and links to Home, Menu, Events, and Reservations. Implements mobile-first responsive behavior for the navigation menu."
+  }, {
+    "file_name" : "Footer.tsx",
+    "file_path" : "frontend/src/components/Footer.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "COMPONENT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Application footer with contact info, social links, and address. Styled with bg-[#1A1A1A] and text-[#F5F5F5].",
+    "public_functions" : [ {
+      "name" : "Footer",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the site footer."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "COMPONENT layer - Renders the site-wide footer, containing contact information, address, social media links, and copyright notice."
+  }, {
+    "file_name" : "Seo.tsx",
+    "file_path" : "frontend/src/components/Seo.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "COMPONENT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Component to inject LocalBusiness schema.org JSON-LD markup for SEO.",
+    "public_functions" : [ {
+      "name" : "Seo",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders a script tag with JSON-LD data."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "COMPONENT layer - Implements the 'Schema Markup for Local Business SEO' feature by rendering a <script type=\"application/ld+json\"> tag with structured data about the bar."
+  }, {
+    "file_name" : "HomePage.tsx",
+    "file_path" : "frontend/src/pages/HomePage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "The landing page for the bar. Features a full-bleed dark hero image, a section for featured cocktails, and a preview of upcoming events.",
+    "public_functions" : [ {
+      "name" : "HomePage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the home page."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/components/Layout.tsx" ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "PAGE layer - The main landing page, structured with a sophisticated dark hero section, a grid of featured items, and a call-to-action for reservations, reflecting the design direction."
+  }, {
+    "file_name" : "ContactPage.tsx",
+    "file_path" : "frontend/src/pages/ContactPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Contact page with address, click-to-call button, and an embedded Google Map.",
+    "public_functions" : [ {
+      "name" : "ContactPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the contact page."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/components/Layout.tsx" ],
+    "depends_on" : [ ],
+    "feature_name" : "core-ui",
+    "file_role" : "PAGE layer - Displays contact information and implements the 'Click-to-Call' and 'Google Maps Integration' features."
+  }, {
+    "file_name" : "AuthContext.tsx",
+    "file_path" : "frontend/src/context/AuthContext.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "CONTEXT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "React context for managing authentication state.",
+    "public_functions" : [ {
+      "name" : "AuthProvider",
+      "parameters" : [ "{ children: React.ReactNode }" ],
+      "return_type" : "JSX.Element",
+      "description" : "Provider component for the auth context."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/authService.ts" ],
+    "depends_on" : [ "frontend/src/services/authService.ts" ],
+    "feature_name" : "auth-ui",
+    "file_role" : "CONTEXT layer - Manages global authentication state (token, role) using localStorage and provides functions like login, logout, isAuthenticated, and isAdmin to the entire application."
+  }, {
+    "file_name" : "useAuth.ts",
+    "file_path" : "frontend/src/hooks/useAuth.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "HOOK",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Custom hook to access the authentication context.",
+    "public_functions" : [ {
+      "name" : "useAuth",
+      "parameters" : [ ],
+      "return_type" : "AuthContextType",
+      "description" : "Provides easy access to auth context values."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/context/AuthContext.tsx" ],
+    "depends_on" : [ "frontend/src/context/AuthContext.tsx" ],
+    "feature_name" : "auth-ui",
+    "file_role" : "HOOK layer - A simple custom hook that provides a clean interface for components to consume the AuthContext via `const auth = useAuth()`."
+  }, {
+    "file_name" : "authService.ts",
+    "file_path" : "frontend/src/services/authService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for making authentication API calls.",
+    "public_functions" : [ {
+      "name" : "login",
+      "parameters" : [ "credentials: AuthRequest" ],
+      "return_type" : "Promise<AuthResponse>",
+      "description" : "Sends a login request to the backend."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/auth/login",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Authenticates a user."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "auth-ui",
+    "file_role" : "SERVICE layer - Handles HTTP communication for authentication. Its primary public function is login(credentials): Promise<AuthResponse>, which calls the POST /api/v1/auth/login endpoint."
+  }, {
+    "file_name" : "ProtectedRoute.tsx",
+    "file_path" : "frontend/src/components/ProtectedRoute.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "COMPONENT",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "A component that protects routes, redirecting unauthenticated users to the login page.",
+    "public_functions" : [ {
+      "name" : "ProtectedRoute",
+      "parameters" : [ "{ children: JSX.Element }" ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders children if authenticated, otherwise redirects."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/hooks/useAuth.ts" ],
+    "depends_on" : [ "frontend/src/hooks/useAuth.ts" ],
+    "feature_name" : "auth-ui",
+    "file_role" : "COMPONENT layer - A route wrapper that uses the useAuth hook to check for authentication. If the user is not authenticated, it redirects to '/login'."
+  }, {
+    "file_name" : "LoginPage.tsx",
+    "file_path" : "frontend/src/pages/LoginPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin login page with a form for email and password.",
+    "public_functions" : [ {
+      "name" : "LoginPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the login form."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/hooks/useAuth.ts" ],
+    "depends_on" : [ "frontend/src/hooks/useAuth.ts" ],
+    "feature_name" : "auth-ui",
+    "file_role" : "PAGE layer - Provides the UI for admin login. It uses react-hook-form and zod for validation and calls the login function from the useAuth hook on submission."
+  }, {
+    "file_name" : "AdminDashboardPage.tsx",
+    "file_path" : "frontend/src/pages/AdminDashboardPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "The main dashboard for administrators, with navigation to manage menus, reservations, and events.",
+    "public_functions" : [ {
+      "name" : "AdminDashboardPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the admin dashboard layout."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "auth-ui",
+    "file_role" : "PAGE layer - The central hub for the admin portal, featuring a sidebar with navigation links to /admin/menu, /admin/reservations, and /admin/events."
+  }, {
+    "file_name" : "MenuPage.tsx",
+    "file_path" : "frontend/src/pages/MenuPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Displays the digital menu, with category filters and a grid of menu items. Items are styled as cards with image, name, description, and price.",
+    "public_functions" : [ {
+      "name" : "MenuPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the public menu page."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/hooks/useMenu.ts", "frontend/src/components/Layout.tsx" ],
+    "depends_on" : [ "frontend/src/hooks/useMenu.ts" ],
+    "feature_name" : "menu-ui",
+    "file_role" : "PAGE layer - The customer-facing menu page. It uses the useMenu hook to fetch and display menu items, providing UI for category filtering and showing loading/error states."
+  }, {
+    "file_name" : "useMenu.ts",
+    "file_path" : "frontend/src/hooks/useMenu.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "HOOK",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Custom hook for fetching menu data using React Query.",
+    "public_functions" : [ {
+      "name" : "useMenuItems",
+      "parameters" : [ "category?: string" ],
+      "return_type" : "{ data, isLoading, isError }",
+      "description" : "Fetches menu items, optionally by category."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/menuService.ts" ],
+    "depends_on" : [ "frontend/src/services/menuService.ts" ],
+    "feature_name" : "menu-ui",
+    "file_role" : "HOOK layer - Abstracts data fetching and state management for the menu. Its primary export is useMenuItems(category?), which calls the menuService and manages state via @tanstack/react-query."
+  }, {
+    "file_name" : "menuService.ts",
+    "file_path" : "frontend/src/services/menuService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for public menu-related API calls.",
+    "public_functions" : [ {
+      "name" : "getMenuItems",
+      "parameters" : [ "category?: string" ],
+      "return_type" : "Promise<MenuItemDto[]>",
+      "description" : "Fetches menu items from the backend."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/menu-items",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Retrieves menu items, with optional category filter."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "menu-ui",
+    "file_role" : "SERVICE layer - Handles public HTTP communication for the menu. Its primary function is getMenuItems(category?): Promise<MenuItemDto[]>, which calls the GET /api/v1/menu-items endpoint."
+  }, {
+    "file_name" : "AdminMenuPage.tsx",
+    "file_path" : "frontend/src/pages/AdminMenuPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin page for CRUD operations on menu items. Features a data table and a modal form for creation/editing.",
+    "public_functions" : [ {
+      "name" : "AdminMenuPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the menu management UI."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/adminMenuService.ts" ],
+    "depends_on" : [ "frontend/src/services/adminMenuService.ts" ],
+    "feature_name" : "menu-ui",
+    "file_role" : "PAGE layer - Provides the admin UI for menu management, including a table of all items and forms (in modals) for creating and editing items, with client-side validation using zod."
+  }, {
+    "file_name" : "adminMenuService.ts",
+    "file_path" : "frontend/src/services/adminMenuService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for admin menu-related API calls.",
+    "public_functions" : [ {
+      "name" : "createMenuItem",
+      "parameters" : [ "item: MenuItemDto" ],
+      "return_type" : "Promise<MenuItemDto>",
+      "description" : "Creates a menu item."
+    }, {
+      "name" : "updateMenuItem",
+      "parameters" : [ "id: string", "item: MenuItemDto" ],
+      "return_type" : "Promise<MenuItemDto>",
+      "description" : "Updates a menu item."
+    }, {
+      "name" : "deleteMenuItem",
+      "parameters" : [ "id: string" ],
+      "return_type" : "Promise<void>",
+      "description" : "Deletes a menu item."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/admin/menu-items",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Creates a menu item."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/menu-items/{id}",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Updates a menu item."
+    }, {
+      "method" : "DELETE",
+      "path" : "/api/v1/admin/menu-items/{id}",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Deletes a menu item."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "menu-ui",
+    "file_role" : "SERVICE layer - Handles protected HTTP communication for menu management. It provides createMenuItem, updateMenuItem, and deleteMenuItem functions that call the corresponding admin endpoints."
+  }, {
+    "file_name" : "ReservationPage.tsx",
+    "file_path" : "frontend/src/pages/ReservationPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Page with a form for customers to book a table. Uses react-hook-form and zod for validation.",
+    "public_functions" : [ {
+      "name" : "ReservationPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the table reservation form."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/hooks/useReservations.ts", "frontend/src/components/Layout.tsx" ],
+    "depends_on" : [ "frontend/src/hooks/useReservations.ts" ],
+    "feature_name" : "reservation-booking",
+    "file_role" : "PAGE layer - The customer-facing reservation page. It provides a form for booking a table and uses the createReservation mutation from the useReservations hook to submit the data."
+  }, {
+    "file_name" : "useReservations.ts",
+    "file_path" : "frontend/src/hooks/useReservations.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "HOOK",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Custom hook for managing reservation data.",
+    "public_functions" : [ {
+      "name" : "useCreateReservation",
+      "parameters" : [ ],
+      "return_type" : "UseMutationResult",
+      "description" : "Provides a mutation function for creating a new reservation."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/reservationService.ts" ],
+    "depends_on" : [ "frontend/src/services/reservationService.ts" ],
+    "feature_name" : "reservation-booking",
+    "file_role" : "HOOK layer - Abstracts the logic for creating a reservation. Its primary export is useCreateReservation(), which returns a mutation function from @tanstack/react-query that calls the reservationService."
+  }, {
+    "file_name" : "reservationService.ts",
+    "file_path" : "frontend/src/services/reservationService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for public reservation API calls.",
+    "public_functions" : [ {
+      "name" : "createReservation",
+      "parameters" : [ "data: CreateReservationRequest" ],
+      "return_type" : "Promise<ReservationResponse>",
+      "description" : "Submits a new reservation."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/reservations",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Creates a new reservation."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "reservation-booking",
+    "file_role" : "SERVICE layer - Handles public HTTP communication for reservations. Its primary function is createReservation(data): Promise<ReservationResponse>, which calls the POST /api/v1/reservations endpoint."
+  }, {
+    "file_name" : "AdminReservationsPage.tsx",
+    "file_path" : "frontend/src/pages/AdminReservationsPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin page to view and manage all table reservations. Allows changing reservation status.",
+    "public_functions" : [ {
+      "name" : "AdminReservationsPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the reservation management UI."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/adminReservationService.ts" ],
+    "depends_on" : [ "frontend/src/services/adminReservationService.ts" ],
+    "feature_name" : "reservation-booking",
+    "file_role" : "PAGE layer - Provides the admin UI for reservation management, including a data table of all reservations and controls to update the status of each (e.g., from PENDING to CONFIRMED)."
+  }, {
+    "file_name" : "adminReservationService.ts",
+    "file_path" : "frontend/src/services/adminReservationService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for admin reservation-related API calls.",
+    "public_functions" : [ {
+      "name" : "getAllReservations",
+      "parameters" : [ ],
+      "return_type" : "Promise<ReservationResponse[]>",
+      "description" : "Fetches all reservations."
+    }, {
+      "name" : "updateReservationStatus",
+      "parameters" : [ "id: string", "status: string" ],
+      "return_type" : "Promise<ReservationResponse>",
+      "description" : "Updates a reservation's status."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/admin/reservations",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Retrieves all reservations."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/reservations/{id}/status",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Updates a reservation's status."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "reservation-booking",
+    "file_role" : "SERVICE layer - Handles protected HTTP communication for reservation management. Provides getAllReservations() and updateReservationStatus(id, status) functions that call the corresponding admin endpoints."
+  }, {
+    "file_name" : "EventsPage.tsx",
+    "file_path" : "frontend/src/pages/EventsPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Displays a calendar or list of upcoming events at the bar.",
+    "public_functions" : [ {
+      "name" : "EventsPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the public events page."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/hooks/useEvents.ts", "frontend/src/components/Layout.tsx" ],
+    "depends_on" : [ "frontend/src/hooks/useEvents.ts" ],
+    "feature_name" : "events-calendar",
+    "file_role" : "PAGE layer - The customer-facing events page. It uses the useEvents hook to fetch and display a list of upcoming events in a visually appealing card layout."
+  }, {
+    "file_name" : "useEvents.ts",
+    "file_path" : "frontend/src/hooks/useEvents.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "HOOK",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Custom hook for fetching event data.",
+    "public_functions" : [ {
+      "name" : "useEvents",
+      "parameters" : [ ],
+      "return_type" : "{ data, isLoading, isError }",
+      "description" : "Fetches upcoming events."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/eventService.ts" ],
+    "depends_on" : [ "frontend/src/services/eventService.ts" ],
+    "feature_name" : "events-calendar",
+    "file_role" : "HOOK layer - Abstracts data fetching for events. Its primary export is useEvents(), which calls the eventService and manages state via @tanstack/react-query."
+  }, {
+    "file_name" : "eventService.ts",
+    "file_path" : "frontend/src/services/eventService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for public event-related API calls.",
+    "public_functions" : [ {
+      "name" : "getEvents",
+      "parameters" : [ ],
+      "return_type" : "Promise<EventDto[]>",
+      "description" : "Fetches upcoming events."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "GET",
+      "path" : "/api/v1/events",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Retrieves upcoming events."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "events-calendar",
+    "file_role" : "SERVICE layer - Handles public HTTP communication for events. Its primary function is getEvents(): Promise<EventDto[]>, which calls the GET /api/v1/events endpoint."
+  }, {
+    "file_name" : "AdminEventsPage.tsx",
+    "file_path" : "frontend/src/pages/AdminEventsPage.tsx",
+    "file_type" : "FRONTEND",
+    "layer" : "PAGE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Admin page for CRUD operations on events.",
+    "public_functions" : [ {
+      "name" : "AdminEventsPage",
+      "parameters" : [ ],
+      "return_type" : "JSX.Element",
+      "description" : "Renders the event management UI."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ "frontend/src/services/adminEventService.ts" ],
+    "depends_on" : [ "frontend/src/services/adminEventService.ts" ],
+    "feature_name" : "events-calendar",
+    "file_role" : "PAGE layer - Provides the admin UI for event management, including a table of all events and forms (in modals) for creating and editing events, with client-side validation using zod."
+  }, {
+    "file_name" : "adminEventService.ts",
+    "file_path" : "frontend/src/services/adminEventService.ts",
+    "file_type" : "FRONTEND",
+    "layer" : "SERVICE",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Service for admin event-related API calls.",
+    "public_functions" : [ {
+      "name" : "createEvent",
+      "parameters" : [ "event: EventDto" ],
+      "return_type" : "Promise<EventDto>",
+      "description" : "Creates an event."
+    }, {
+      "name" : "updateEvent",
+      "parameters" : [ "id: string", "event: EventDto" ],
+      "return_type" : "Promise<EventDto>",
+      "description" : "Updates an event."
+    }, {
+      "name" : "deleteEvent",
+      "parameters" : [ "id: string" ],
+      "return_type" : "Promise<void>",
+      "description" : "Deletes an event."
+    } ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ {
+      "method" : "POST",
+      "path" : "/api/v1/admin/events",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Creates an event."
+    }, {
+      "method" : "PUT",
+      "path" : "/api/v1/admin/events/{id}",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Updates an event."
+    }, {
+      "method" : "DELETE",
+      "path" : "/api/v1/admin/events/{id}",
+      "request_body" : null,
+      "response_body" : null,
+      "description" : "Deletes an event."
+    } ],
+    "imports_from" : [ "frontend/src/api/client.ts" ],
+    "depends_on" : [ "frontend/src/api/client.ts" ],
+    "feature_name" : "events-calendar",
+    "file_role" : "SERVICE layer - Handles protected HTTP communication for event management. It provides createEvent, updateEvent, and deleteEvent functions that call the corresponding admin endpoints."
+  }, {
+    "file_name" : "Dockerfile",
+    "file_path" : "Dockerfile",
+    "file_type" : "INFRA",
+    "layer" : "INFRA",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Multi-stage Dockerfile for building and running the Spring Boot application.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "infrastructure",
+    "file_role" : "INFRA layer - Defines the containerization recipe for the Java backend, enabling consistent builds and deployments."
+  }, {
+    "file_name" : "docker-compose.yml",
+    "file_path" : "docker-compose.yml",
+    "file_type" : "INFRA",
+    "layer" : "INFRA",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Docker Compose file for local development, setting up the backend and a PostgreSQL database.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "infrastructure",
+    "file_role" : "INFRA layer - Orchestrates local development environment containers, linking the backend service with a PostgreSQL database service."
+  }, {
+    "file_name" : ".env.example",
+    "file_path" : ".env.example",
+    "file_type" : "CONFIG",
+    "layer" : "INFRA",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Example environment variables for both frontend and backend.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "infrastructure",
+    "file_role" : "CONFIG layer - Provides a template for required environment variables, ensuring developers know what configuration is needed to run the application."
+  }, {
+    "file_name" : ".gitignore",
+    "file_path" : ".gitignore",
+    "file_type" : "CONFIG",
+    "layer" : "INFRA",
+    "created_date" : "2024-07-27",
+    "updated_date" : "2024-07-27",
+    "status" : "PLANNED",
+    "description" : "Standard .gitignore for a Java/Spring Boot and Node/React project.",
+    "public_functions" : [ ],
+    "public_variables" : [ ],
+    "api_endpoints" : [ ],
+    "api_endpoints_consumed" : [ ],
+    "imports_from" : [ ],
+    "depends_on" : [ ],
+    "feature_name" : "infrastructure",
+    "file_role" : "CONFIG layer - Specifies intentionally untracked files to ignore in Git, such as build artifacts, dependency folders, and environment-specific files."
+  } ],
+  "features" : [ {
+    "feature_name" : "shared-backend-core",
+    "feature_display_name" : "Shared Backend Core",
+    "feature_type" : "SHARED",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/model/User.java", "backend/src/main/java/com/filamentbarbaner/model/Role.java", "backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java", "backend/src/main/java/com/filamentbarbaner/service/UserService.java", "backend/src/main/java/com/filamentbarbaner/config/AdminInitializer.java", "backend/src/main/java/com/filamentbarbaner/exception/GlobalExceptionHandler.java", "backend/src/main/java/com/filamentbarbaner/dto/ErrorResponse.java" ],
+    "feature_instruction" : "This feature instruction covers the foundational components for the backend application, including user management, authentication support, and global exception handling. Implement all files as described below, ensuring they interact correctly.\n\n### 1. Data Models (`Role.java`, `User.java`)\n\n**`Role.java`**\n- This is a public enum named `Role`.\n- It defines two values: `ADMIN` and `CUSTOMER`.\n\n**`User.java`**\n- This is a JPA entity class annotated with `@Entity`, `@Table(name = \"users\")`, `@Data`, `@Builder`, `@NoArgsConstructor`, and `@AllArgsConstructor`.\n- It must implement the `UserDetails` interface from Spring Security.\n- **Fields:**\n  - `id`: `UUID`. Annotated with `@Id` and `@GeneratedValue(strategy = GenerationType.AUTO)`. This is the primary key.\n  - `email`: `String`. Annotated with `@Column(unique = true, nullable = false)`. This will be used as the username.\n  - `passwordHash`: `String`. Annotated with `@Column(nullable = false)`. This stores the BCrypt-hashed password.\n  - `role`: `Role`. Annotated with `@Enumerated(EnumType.STRING)` and `@Column(nullable = false)`.\n- **`UserDetails` Implementation:**\n  - `getAuthorities()`: Returns a `Collection` containing a single `SimpleGrantedAuthority` with the user's role name (e.g., `\"ROLE_ADMIN\"`).\n  - `getPassword()`: Returns `passwordHash`.\n  - `getUsername()`: Returns `email`.\n  - `isAccountNonExpired()`, `isAccountNonLocked()`, `isCredentialsNonExpired()`, `isEnabled()`: All should return `true`.\n\n### 2. Data Access Layer (`UserRepository.java`)\n\n**`UserRepository.java`**\n- This is an interface that extends `JpaRepository<User, UUID>`.\n- It must contain the following method signature:\n  - `Optional<User> findByEmail(String email);`\n\n### 3. Service Layer (`UserService.java`)\n\n**`UserService.java`**\n- This class is a Spring `@Service`.\n- It must implement the `UserDetailsService` interface from Spring Security.\n- **Dependencies:**\n  - Inject `UserRepository` via constructor injection.\n- **Public Methods:**\n  - **`@Override public UserDetails loadUserByUsername(String email)`**\n    - **Logic:**\n      1. Call `userRepository.findByEmail(email)` to find the user.\n      2. If the `Optional<User>` is empty, throw a `UsernameNotFoundException` with the message \"User not found with email: \" + email.\n      3. If the user is found, return the `User` object. (Since `User` implements `UserDetails`, it can be returned directly).\n\n### 4. Configuration (`AdminInitializer.java`)\n\n**`AdminInitializer.java`**\n- This class is a Spring `@Component` and implements `CommandLineRunner`.\n- **Dependencies:**\n  - Inject `UserRepository` and `PasswordEncoder` via constructor injection.\n- **Properties:**\n  - Use `@Value(\"${admin.email}\")` to inject the admin email into a `String` field.\n  - Use `@Value(\"${admin.password}\")` to inject the admin password into a `String` field.\n- **Public Methods:**\n  - **`@Override public void run(String... args)`**\n    - **Logic:**\n      1. Call `userRepository.findByEmail()` with the injected admin email.\n      2. If a user is already present (the returned `Optional` is not empty), log a message that the admin user already exists and terminate the method.\n      3. If no user is found, create a new `User` object using its builder.\n      4. Set the user's `email` to the injected admin email.\n      5. Set the user's `passwordHash` by encoding the injected admin password using the `passwordEncoder.encode()` method.\n      6. Set the user's `role` to `Role.ADMIN`.\n      7. Save the new admin user to the database by calling `userRepository.save()`.\n      8. Log a message indicating that the default admin user has been created.\n\n### 5. Exception Handling (`ErrorResponse.java`, `GlobalExceptionHandler.java`)\n\n**`ErrorResponse.java`**\n- This is a public record or data class.\n- **Fields:**\n  - `timestamp`: `LocalDateTime`\n  - `status`: `int`\n  - `error`: `String`\n  - `message`: `String`\n  - `path`: `String`\n\n**`GlobalExceptionHandler.java`**\n- This class is annotated with `@RestControllerAdvice`.\n- It should contain `@ExceptionHandler` methods to catch exceptions and return a standardized `ErrorResponse`.\n- **Example Handler (for generic exceptions):**\n  - **`handleAllExceptions(Exception ex, WebRequest request)`**\n    - Annotate with `@ExceptionHandler(Exception.class)`.\n    - **Logic:**\n      1. Create a new `ErrorResponse` object.\n      2. Populate its fields:\n         - `timestamp`: `LocalDateTime.now()`\n         - `status`: `HttpStatus.INTERNAL_SERVER_ERROR.value()` (500)\n         - `error`: `HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()`\n         - `message`: `ex.getMessage()`\n         - `path`: `((ServletWebRequest)request).getRequest().getRequestURI()`\n      3. Return a `ResponseEntity<ErrorResponse>` with the `ErrorResponse` object as the body and `HttpStatus.INTERNAL_SERVER_ERROR` as the status.\n- **Add another handler for `UsernameNotFoundException`:**\n  - **`handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request)`**\n    - Annotate with `@ExceptionHandler(UsernameNotFoundException.class)`.\n    - Follow the same logic as above, but use `HttpStatus.NOT_FOUND` (404) for the status and error fields.\n\n### Inter-File and Cross-Feature Wiring\n\n- `UserService` injects `UserRepository` to fetch user data.\n- `AdminInitializer` injects `UserRepository` to check for and create the admin user. It also injects `PasswordEncoder` (which will be defined as a bean in the `shared-backend-auth` feature's `SecurityConfig`).\n- `User` entity uses the `Role` enum.\n- `GlobalExceptionHandler` constructs and returns `ErrorResponse` DTOs.\n- The `UserService` (specifically its implementation of `UserDetailsService`) will be consumed by the Spring Security configuration (`SecurityConfig` from the `shared-backend-auth` feature) to manage authentication.",
+    "change_required" : true
+  }, {
+    "feature_name" : "shared-backend-auth",
+    "feature_display_name" : "Shared Backend Authentication",
+    "feature_type" : "SHARED",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/controller/AuthController.java", "backend/src/main/java/com/filamentbarbaner/dto/AuthRequest.java", "backend/src/main/java/com/filamentbarbaner/dto/AuthResponse.java", "backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java", "backend/src/main/java/com/filamentbarbaner/security/JwtAuthFilter.java", "backend/src/main/java/com/filamentbarbaner/config/SecurityConfig.java" ],
+    "feature_instruction" : "This feature implements the core authentication and authorization layer for the Filament Bar backend using Spring Security and JSON Web Tokens (JWT). It includes a login endpoint, JWT generation/validation utilities, a request filter to process tokens, and the main security configuration.\n\n### 1. Data Transfer Objects (DTOs)\n\n**`AuthRequest.java`**\n- A `record` located in `com.filamentbarbaner.dto`.\n- Fields:\n  - `String email`: Add `@Email` and `@NotBlank` validation annotations.\n  - `String password`: Add `@NotBlank` validation annotation.\n\n**`AuthResponse.java`**\n- A `record` located in `com.filamentbarbaner.dto`.\n- Fields:\n  - `String token`: The JWT.\n  - `String role`: The user's role (e.g., \"ROLE_ADMIN\").\n  - `long expiresAt`: The token's expiration timestamp in epoch milliseconds.\n\n### 2. JWT Utility (`JwtUtil.java`)\n\n- A class in `com.filamentbarbaner.util` annotated with `@Component`.\n- It will manage JWT creation and validation.\n- **Configuration Properties:**\n  - Inject two properties from `application.properties`:\n    - `@Value(\"${jwt.secret}\") private String secretKey;`\n    - `@Value(\"${jwt.expiration}\") private long jwtExpiration;`\n- **Public Methods:**\n  - **`public String generateToken(UserDetails userDetails)`**\n    1. Create a `Map<String, Object> claims`.\n    2. Extract the user's role from `userDetails.getAuthorities()` and add it to the claims map under the key \"role\".\n    3. Use `io.jsonwebtoken.Jwts.builder()` to construct the token.\n    4. Set claims, subject (`userDetails.getUsername()`), issued at date (`new Date(System.currentTimeMillis())`), and expiration date (`new Date(System.currentTimeMillis() + jwtExpiration)`).\n    5. Sign the token with `secretKey` using `SignatureAlgorithm.HS256`.\n    6. Return the compacted token string.\n\n  - **`public boolean validateToken(String token, UserDetails userDetails)`**\n    1. Extract the email from the token using `extractEmail(token)`.\n    2. Return `true` if the extracted email equals `userDetails.getUsername()` and the token is not expired (use a private helper method `isTokenExpired`). Otherwise, return `false`.\n\n  - **`public String extractEmail(String token)`**\n    1. This is a convenience method for `extractClaim(token, Claims::getSubject)`.\n\n- **Private Helper Methods:**\n  - `private Claims extractAllClaims(String token)`: Parses the token with the `secretKey` and returns the claims body.\n  - `public <T> T extractClaim(String token, Function<Claims, T> claimsResolver)`: A generic method to extract a specific claim using the provided resolver function.\n  - `private Date extractExpiration(String token)`: Extracts the expiration date claim.\n  - `private boolean isTokenExpired(String token)`: Checks if the token's expiration date is before the current date.\n\n### 3. Authentication Controller (`AuthController.java`)\n\n- A class in `com.filamentbarbaner.controller` annotated with `@RestController` and `@RequestMapping(\"/api/v1/auth\")`.\n- **Dependencies:**\n  - Inject `AuthenticationManager`, `JwtUtil`, and `UserDetailsService` (from `shared-backend-core`).\n- **API Endpoint:**\n  - **`@PostMapping(\"/login\")`\n    `public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthRequest authRequest)`**\n    1. **Authentication:**\n       - Try to authenticate the user by calling `authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()))`.\n       - If authentication fails, catch `BadCredentialsException` and return `ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()`.\n    2. **Token Generation:**\n       - If authentication succeeds, load the `UserDetails` by calling `userDetailsService.loadUserByUsername(authRequest.email())`.\n       - Generate a JWT by calling `jwtUtil.generateToken(userDetails)`.\n    3. **Response Construction:**\n       - Extract the user's role from `userDetails.getAuthorities()`. Take the first authority and get its string representation (e.g., \"ROLE_ADMIN\").\n       - Calculate the expiration timestamp: `System.currentTimeMillis() + jwtExpiration` (get `jwtExpiration` from `JwtUtil` or inject it here as well).\n       - Create a new `AuthResponse` with the token, role, and expiration timestamp.\n       - Return the `AuthResponse` object with an `OK` status: `ResponseEntity.ok(authResponse)`.\n\n### 4. JWT Authentication Filter (`JwtAuthFilter.java`)\n\n- A class in `com.filamentbarbaner.security` that extends `OncePerRequestFilter` and is annotated with `@Component`.\n- **Dependencies:**\n  - Inject `JwtUtil` and `UserDetailsService` (from `shared-backend-core`, provided by `UserService`).\n- **Core Logic (`doFilterInternal` method):**\n  1. Get the `Authorization` header from the `HttpServletRequest`.\n  2. Check if the header is `null` or does not start with `\"Bearer \"`. If so, call `filterChain.doFilter` and return.\n  3. Extract the JWT from the header by removing the \"Bearer \" prefix.\n  4. Extract the user's email from the token using `jwtUtil.extractEmail(jwt)`.\n  5. If the email is not `null` and `SecurityContextHolder.getContext().getAuthentication()` is `null` (meaning the user is not yet authenticated for this request):\n     a. Load `UserDetails` using `userDetailsService.loadUserByUsername(email)`.\n     b. Validate the token using `jwtUtil.validateToken(jwt, userDetails)`.\n     c. If the token is valid, create a `UsernamePasswordAuthenticationToken` with `userDetails`, `null` for credentials, and `userDetails.getAuthorities()`.\n     d. Set the request details on the token: `token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request))`.\n     e. Set the authentication object in the security context: `SecurityContextHolder.getContext().setAuthentication(token)`.\n  6. Call `filterChain.doFilter(request, response)` to continue the filter chain.\n\n### 5. Spring Security Configuration (`SecurityConfig.java`)\n\n- A class in `com.filamentbarbaner.config` annotated with `@Configuration` and `@EnableWebSecurity`.\n- **Dependencies:**\n  - Inject `JwtAuthFilter` and `UserDetailsService` (`UserService`).\n- **Bean Definitions:**\n  - **`@Bean public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception`**\n    1. Disable CSRF: `http.csrf(AbstractHttpConfigurer::disable)`.\n    2. Configure CORS (a default permissive configuration is acceptable for now).\n    3. Configure authorization rules: `http.authorizeHttpRequests(auth -> auth ...)`\n       - Permit `POST /api/v1/auth/login`.\n       - Permit `POST /api/v1/reservations`.\n       - Permit all `GET` requests to `/api/v1/**` (for public content like menu, events).\n       - Restrict `/api/v1/admin/**` to users with the `\"ADMIN\"` role.\n       - Require authentication for any other request: `.anyRequest().authenticated()`.\n    4. Configure session management to be stateless: `http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))`.\n    5. Set the custom authentication provider: `http.authenticationProvider(authenticationProvider())`.\n    6. Add the `JwtAuthFilter` before the standard `UsernamePasswordAuthenticationFilter`: `http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)`.\n    7. Return `http.build()`.\n\n  - **`@Bean public AuthenticationProvider authenticationProvider()`**\n    1. Create a `DaoAuthenticationProvider` instance.\n    2. Set the `UserDetailsService` on it.\n    3. Set the `PasswordEncoder` on it (by calling the `passwordEncoder()` bean method).\n    4. Return the provider.\n\n  - **`@Bean public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception`**\n    1. Return `config.getAuthenticationManager()`.\n\n  - **`@Bean public PasswordEncoder passwordEncoder()`**\n    1. Return a new `BCryptPasswordEncoder()`.",
+    "change_required" : true
+  }, {
+    "feature_name" : "menu-management-core",
+    "feature_display_name" : "Menu Management (Core)",
+    "feature_type" : "BACKEND",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/model/MenuItem.java", "backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java", "backend/src/main/java/com/filamentbarbaner/repository/MenuItemRepository.java", "backend/src/main/java/com/filamentbarbaner/service/MenuService.java" ],
+    "feature_instruction" : "This feature, `menu-management-core`, establishes the foundational backend logic for managing menu items at Filament Bar. It includes the data model, repository for database interaction, and the service layer for business logic. This feature does not expose any API endpoints itself but provides the service layer for the `menu-management-api` feature.\n\n### 1. Data Model\n\n#### `MenuItemCategory.java`\nThis file defines the possible categories for a menu item.\n- **Package**: `com.filamentbarbaner.model`\n- **Type**: `public enum MenuItemCategory`\n- **Enum Constants**: Define the following values:\n  - `COCKTAILS`\n  - `MOCKTAILS`\n  - `APPETIZERS`\n  - `MAIN_COURSE`\n\n#### `MenuItem.java`\nThis file defines the JPA entity for a menu item.\n- **Package**: `com.filamentbarbaner.model`\n- **Annotations**: Annotate the class with `@Entity` and `@Table(name = \"menu_items\")`.\n- **Fields**: Implement the following fields with appropriate JPA annotations. Ensure standard getters, setters, and a no-argument constructor are present.\n  - `id`: `private UUID id;`\n    - Annotations: `@Id`, `@GeneratedValue(strategy = GenerationType.AUTO)`\n  - `name`: `private String name;`\n    - Annotation: `@Column(nullable = false, length = 255)`\n  - `description`: `private String description;`\n    - Annotation: `@Column(columnDefinition = \"TEXT\")`\n  - `price`: `private BigDecimal price;`\n    - Annotation: `@Column(nullable = false)`\n  - `category`: `private MenuItemCategory category;`\n    - Annotations: `@Enumerated(EnumType.STRING)`, `@Column(nullable = false)`\n  - `imageUrl`: `private String imageUrl;`\n  - `isAvailable`: `private boolean isAvailable = true;`\n    - Annotation: `@Column(nullable = false)`\n\n### 2. Repository Layer\n\n#### `MenuItemRepository.java`\nThis is the Spring Data JPA repository for `MenuItem` entities.\n- **Package**: `com.filamentbarbaner.repository`\n- **Type**: `public interface MenuItemRepository`\n- **Annotation**: `@Repository`\n- **Inheritance**: Extend `JpaRepository<MenuItem, UUID>`.\n- **Public Methods**:\n  - `List<MenuItem> findByCategory(MenuItemCategory category);`\n    - This method will be implemented automatically by Spring Data JPA based on its name. It retrieves all menu items matching the given category.\n\n### 3. Service Layer\n\n#### `MenuService.java`\nThis service contains the business logic for managing menu items. It acts as the bridge between the controllers (from `menu-management-api`) and the repository.\n\n- **Package**: `com.filamentbarbaner.service`\n- **Annotation**: `@Service`\n- **Dependencies**:\n  - Inject `MenuItemRepository` via constructor injection: `private final MenuItemRepository menuItemRepository;`\n\n- **Note on DTOs**: This service operates on `MenuItemDto`, which is defined in another feature. Assume `MenuItemDto` exists in `com.filamentbarbaner.dto` with fields mirroring the `MenuItem` entity (`id`, `name`, `description`, `price`, `category`, `imageUrl`, `isAvailable`). You will need to implement private mapping methods to convert between the entity and the DTO.\n\n- **Mapping Logic**: Create the following private helper methods:\n  - `private MenuItemDto toDto(MenuItem menuItem)`: Converts a `MenuItem` entity to a `MenuItemDto`.\n  - `private MenuItem toEntity(MenuItemDto menuItemDto)`: Converts a `MenuItemDto` to a `MenuItem` entity.\n\n- **Public Methods**:\n\n  - **`public List<MenuItemDto> getAllMenuItems(Optional<MenuItemCategory> category)`**\n    1.  Declare a `List<MenuItem>` named `menuItems`.\n    2.  Check if the `category` optional is present.\n    3.  If `category.isPresent()`, call `menuItemRepository.findByCategory(category.get())` and assign the result to `menuItems`.\n    4.  Otherwise, call `menuItemRepository.findAll()` and assign the result to `menuItems`.\n    5.  Map the `menuItems` list to a `List<MenuItemDto>` by streaming it and calling `toDto()` on each element.\n    6.  Return the resulting list of DTOs.\n\n  - **`public MenuItemDto createMenuItem(MenuItemDto menuItemDto)`**\n    1.  Convert the incoming `menuItemDto` to a `MenuItem` entity using your `toEntity()` helper. Ensure the ID is not set, so it can be generated by the database.\n    2.  Save the new entity using `menuItemRepository.save(newMenuItem)`.\n    3.  Convert the returned, persisted entity (which now includes the generated ID) back to a `MenuItemDto` using `toDto()`.\n    4.  Return the new `MenuItemDto`.\n\n  - **`public Optional<MenuItemDto> updateMenuItem(UUID id, MenuItemDto menuItemDto)`**\n    1.  Fetch the existing entity using `menuItemRepository.findById(id)`.\n    2.  If the returned `Optional` is empty, return `Optional.empty()` immediately.\n    3.  If the entity exists, retrieve it from the `Optional`.\n    4.  Update all its fields (`name`, `description`, `price`, `category`, `imageUrl`, `isAvailable`) with the values from the incoming `menuItemDto`.\n    5.  Save the updated entity using `menuItemRepository.save(existingMenuItem)`.\n    6.  Convert the saved entity to a `MenuItemDto` using `toDto()`.\n    7.  Return an `Optional` containing the updated DTO.\n\n  - **`public void deleteMenuItem(UUID id)`**\n    1.  Call `menuItemRepository.deleteById(id)`. This method is void and does not throw an exception if the ID is not found.\n\n### Inter-File Wiring\n- `MenuService` injects and uses `MenuItemRepository` for all database operations.\n- `MenuItemRepository` is a JPA repository for the `MenuItem` entity.\n- The `MenuItem` entity uses the `MenuItemCategory` enum for its `category` field.",
+    "change_required" : true
+  }, {
+    "feature_name" : "menu-management-api",
+    "feature_display_name" : "Menu Management (API)",
+    "feature_type" : "BACKEND",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/controller/MenuController.java", "backend/src/main/java/com/filamentbarbaner/controller/AdminMenuController.java", "backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java" ],
+    "feature_instruction" : "This feature implements the API for managing the menu at Filament Bar. It consists of a public-facing controller for viewing the menu and a secured admin controller for CRUD operations. It also defines the Data Transfer Object (DTO) used for all menu item interactions.\n\n### 1. MenuItemDto.java\n\nThis file defines the `MenuItemDto`, a Java `record` that serves as the data contract for all menu-related API endpoints. It is used as both a request body for creating/updating items and a response body for all menu endpoints.\n\n**File Path:** `backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java`\n\n**Implementation Details:**\n- Define this as a public `record` named `MenuItemDto`.\n- It should have the following components:\n  - `UUID id`: The unique identifier. Can be null when creating a new item.\n  - `String name`: The name of the menu item. Add `@NotBlank` validation.\n  - `String description`: A description of the item.\n  - `BigDecimal price`: The price. Add `@NotNull` and `@Positive` validation.\n  - `MenuItemCategory category`: The category of the item (e.g., COCKTAILS, APPETIZERS). Add `@NotNull` validation. This type is imported from `com.filamentbarbaner.model.MenuItemCategory`.\n  - `String imageUrl`: A URL pointing to an image of the item.\n  - `boolean isAvailable`: The availability status of the item.\n- Ensure necessary imports for `java.util.UUID`, `java.math.BigDecimal`, `jakarta.validation.constraints.*`, and `com.filamentbarbaner.model.MenuItemCategory`.\n\n### 2. MenuController.java\n\nThis is the public-facing REST controller for fetching menu items. It provides a read-only view of the menu.\n\n**File Path:** `backend/src/main/java/com/filamentbarbaner/controller/MenuController.java`\n\n**Implementation Details:**\n- Annotate the class with `@RestController` and `@RequestMapping(\"/api/v1/menu-items\")`.\n- Inject `MenuService` from the `menu-management-core` feature using constructor injection. The field should be `private final MenuService menuService;`.\n\n**Public Methods:**\n\n- **`getMenuItems(Optional<MenuItemCategory> category)`**\n  - **Signature:** `public ResponseEntity<List<MenuItemDto>> getMenuItems(@RequestParam(required = false) Optional<MenuItemCategory> category)`\n  - **Mapping:** `@GetMapping`\n  - **Logic:**\n    1. Call `menuService.getAllMenuItems(category)`. The `category` parameter is an optional query parameter (e.g., `/api/v1/menu-items?category=COCKTAILS`).\n    2. The service will return a `List<MenuItemDto>`.\n    3. Wrap the list in a `ResponseEntity` with an HTTP 200 OK status using `ResponseEntity.ok()`.\n\n### 3. AdminMenuController.java\n\nThis is the admin-only REST controller for creating, updating, and deleting menu items. All endpoints under this controller must be secured and accessible only to users with the 'ADMIN' role.\n\n**File Path:** `backend/src/main/java/com/filamentbarbaner/controller/AdminMenuController.java`\n\n**Implementation Details:**\n- Annotate the class with `@RestController` and `@RequestMapping(\"/api/v1/admin/menu-items\")`.\n- Secure the entire controller by adding the `@PreAuthorize(\"hasRole('ADMIN')\")` annotation at the class level.\n- Inject `MenuService` from the `menu-management-core` feature using constructor injection. The field should be `private final MenuService menuService;`.\n\n**Public Methods:**\n\n- **`createMenuItem(MenuItemDto menuItemDto)`**\n  - **Signature:** `public ResponseEntity<MenuItemDto> createMenuItem(@Valid @RequestBody MenuItemDto menuItemDto)`\n  - **Mapping:** `@PostMapping`\n  - **Logic:**\n    1. The `menuItemDto` from the request body is validated using `@Valid`.\n    2. Call `menuService.createMenuItem(menuItemDto)` to persist the new menu item.\n    3. The service returns the created `MenuItemDto` (including the generated ID).\n    4. Return the created DTO in a `ResponseEntity` with an HTTP 201 Created status.\n\n- **`updateMenuItem(UUID id, MenuItemDto menuItemDto)`**\n  - **Signature:** `public ResponseEntity<MenuItemDto> updateMenuItem(@PathVariable UUID id, @Valid @RequestBody MenuItemDto menuItemDto)`\n  - **Mapping:** `@PutMapping(\"/{id}\")`\n  - **Logic:**\n    1. The `menuItemDto` from the request body is validated using `@Valid`.\n    2. Call `menuService.updateMenuItem(id, menuItemDto)`.\n    3. The service returns an `Optional<MenuItemDto>`.\n    4. If the `Optional` contains a value, return it in a `ResponseEntity` with an HTTP 200 OK status.\n    5. If the `Optional` is empty (meaning no menu item was found for the given `id`), return a `ResponseEntity` with an HTTP 404 Not Found status.\n\n- **`deleteMenuItem(UUID id)`**\n  - **Signature:** `public ResponseEntity<Void> deleteMenuItem(@PathVariable UUID id)`\n  - **Mapping:** `@DeleteMapping(\"/{id}\")`\n  - **Logic:**\n    1. Call `menuService.deleteMenuItem(id)`.\n    2. The service method returns `void` and will throw an exception if the item doesn't exist, which will be handled by a global exception handler. Assuming successful deletion, proceed to the next step.\n    3. Return a `ResponseEntity` with an HTTP 204 No Content status using `ResponseEntity.noContent().build()`.\n\n### Inter-Feature Wiring\n\n- `MenuController` and `AdminMenuController` both inject and call methods on `MenuService`, which is defined in the `menu-management-core` feature.\n- The method signatures from `MenuService` that you will call are:\n  - `List<MenuItemDto> getAllMenuItems(Optional<MenuItemCategory> category)`\n  - `MenuItemDto createMenuItem(MenuItemDto menuItemDto)`\n  - `Optional<MenuItemDto> updateMenuItem(UUID id, MenuItemDto menuItemDto)`\n  - `void deleteMenuItem(UUID id)`\n- All three files in this feature (`MenuController`, `AdminMenuController`, `MenuItemDto`) use or reference types from other features or packages, specifically `MenuItemDto` itself and the `MenuItemCategory` enum from `com.filamentbarbaner.model`.",
+    "change_required" : true
+  }, {
+    "feature_name" : "reservation-system-core",
+    "feature_display_name" : "Reservation System (Core)",
+    "feature_type" : "BACKEND",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/model/Reservation.java", "backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java", "backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java", "backend/src/main/java/com/filamentbarbaner/service/ReservationService.java" ],
+    "feature_instruction" : "This feature instruction outlines the implementation of the core reservation system for Filament Bar (Baner). It covers the data model, repository, and service layer for creating and managing reservations.\n\n### 1. Data Transfer Objects (DTOs)\n\nBefore implementing the service, create the following DTO classes in the `backend/src/main/java/com/filamentbarbaner/dto/` directory. These are required by the `ReservationService`.\n\n**`CreateReservationRequest.java`**\n- A simple POJO with the following fields for incoming reservation requests. Use validation annotations.\n- `String customerName` (@NotBlank)\n- `String customerEmail` (@NotBlank, @Email)\n- `String customerPhone` (@NotBlank)\n- `LocalDateTime reservationTime` (@NotNull, @Future)\n- `int numberOfGuests` (@Min(1))\n- `String specialRequests` (optional, can be null)\n\n**`ReservationResponse.java`**\n- A simple POJO to represent reservation data sent back to clients.\n- `UUID id`\n- `String customerName`\n- `String customerEmail`\n- `String customerPhone`\n- `LocalDateTime reservationTime`\n- `int numberOfGuests`\n- `ReservationStatus status`\n- `String specialRequests`\n\n### 2. Enumeration: ReservationStatus\n\n**File: `backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java`**\n\n- Create a public enum `ReservationStatus`.\n- Define the following enum constants:\n  - `PENDING`\n  - `CONFIRMED`\n  - `CANCELLED`\n  - `COMPLETED`\n\n### 3. Entity: Reservation\n\n**File: `backend/src/main/java/com/filamentbarbaner/model/Reservation.java`**\n\n- This class is a JPA entity representing a reservation.\n- Annotate the class with `@Entity` and `@Table(name = \"reservations\")`.\n- Use Lombok annotations for boilerplate code: `@Data`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor`.\n- Define the following fields with appropriate JPA annotations:\n  - `id`: `UUID`. Annotate with `@Id` and `@GeneratedValue(strategy = GenerationType.AUTO)`. This will be the primary key.\n  - `customerName`: `String`. Annotate with `@Column(nullable = false)`.\n  - `customerEmail`: `String`. Annotate with `@Column(nullable = false)`.\n  - `customerPhone`: `String`. Annotate with `@Column(nullable = false)`.\n  - `reservationTime`: `LocalDateTime`. Annotate with `@Column(nullable = false)`.\n  - `numberOfGuests`: `int`. Annotate with `@Column(nullable = false)`.\n  - `status`: `ReservationStatus`. Annotate with `@Enumerated(EnumType.STRING)` and `@Column(nullable = false)`.\n  - `specialRequests`: `String`. This field is optional.\n\n### 4. Repository: ReservationRepository\n\n**File: `backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java`**\n\n- Create a public interface `ReservationRepository` that extends `JpaRepository<Reservation, UUID>`.\n- Add the following method signature. Spring Data JPA will automatically provide the implementation.\n  - `List<Reservation> findByReservationTimeBetween(LocalDateTime start, LocalDateTime end);`\n\n### 5. Service: ReservationService\n\n**File: `backend/src/main/java/com/filamentbarbaner/service/ReservationService.java`**\n\n- Annotate the class with `@Service`.\n- Inject `ReservationRepository` via constructor injection.\n- Implement a private helper method `toReservationResponse(Reservation reservation)` to map a `Reservation` entity to a `ReservationResponse` DTO. You will also need a helper method `fromRequest(CreateReservationRequest request)` or similar mapping logic.\n\n**Public Method Implementations:**\n\n**`public ReservationResponse createReservation(CreateReservationRequest request)`**\n1.  Create a new `Reservation` entity instance.\n2.  Map all fields from the `request` DTO to the new entity.\n3.  Set the `status` of the new reservation to `ReservationStatus.PENDING`.\n4.  Save the entity using `reservationRepository.save(reservation)`.\n5.  Map the saved entity (which now has a generated ID) to a `ReservationResponse` DTO using your helper method.\n6.  Return the `ReservationResponse` DTO.\n\n**`public List<ReservationResponse> getAllReservations()`**\n1.  Call `reservationRepository.findAll()` to retrieve all `Reservation` entities.\n2.  Use a stream to map each `Reservation` entity in the list to a `ReservationResponse` DTO.\n3.  Collect the results into a `List<ReservationResponse>`.\n4.  Return the list.\n\n**`public Optional<ReservationResponse> updateReservationStatus(UUID id, ReservationStatus status)`**\n1.  Find the reservation using `reservationRepository.findById(id)`.\n2.  If the returned `Optional<Reservation>` is empty, return `Optional.empty()` immediately.\n3.  If the reservation is found, get the `Reservation` entity from the Optional.\n4.  Update its status using `reservation.setStatus(status)`.\n5.  Save the updated entity using `reservationRepository.save(reservation)`.\n6.  Map the updated entity to a `ReservationResponse` DTO.\n7.  Wrap the DTO in an `Optional` and return it (`Optional.of(responseDto)`).\n\n### Inter-File Wiring\n\n- `ReservationService` depends on and injects `ReservationRepository`.\n- `ReservationService` uses `CreateReservationRequest` and `ReservationResponse` DTOs for its public method contracts.\n- `ReservationRepository` is an interface for the `Reservation` entity.\n- The `Reservation` entity uses the `ReservationStatus` enum for its `status` field.",
+    "change_required" : true
+  }, {
+    "feature_name" : "reservation-system-api",
+    "feature_display_name" : "Reservation System (API)",
+    "feature_type" : "BACKEND",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/controller/ReservationController.java", "backend/src/main/java/com/filamentbarbaner/controller/AdminReservationController.java", "backend/src/main/java/com/filamentbarbaner/dto/CreateReservationRequest.java", "backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java" ],
+    "feature_instruction" : "This feature implements the API layer for the reservation system, providing public endpoints for creating reservations and admin-only endpoints for managing them. It consists of two controllers and two DTOs. The controllers will delegate all business logic to the `ReservationService` from the `reservation-system-core` feature.\n\n### Data Transfer Objects (DTOs)\n\n**1. `CreateReservationRequest.java`**\nThis file defines the request body for creating a new reservation.\n- Implement this as a Java `record`.\n- It must have the following fields with Jakarta Validation annotations:\n  - `String customerName`: Must be annotated with `@NotBlank`.\n  - `String customerEmail`: Must be annotated with `@NotBlank` and `@Email`.\n  - `String customerPhone`: Must be annotated with `@NotBlank`.\n  - `LocalDateTime reservationTime`: Must be annotated with `@NotNull` and `@Future`.\n  - `int numberOfGuests`: Must be annotated with `@Min(1)`.\n  - `String specialRequests`: Optional, no validation needed.\n\n**2. `ReservationResponse.java`**\nThis file defines the standard JSON response for reservation-related endpoints.\n- Implement this as a Java `record`.\n- It must have the following fields:\n  - `UUID id`\n  - `String customerName`\n  - `String customerEmail`\n  - `String customerPhone`\n  - `LocalDateTime reservationTime`\n  - `int numberOfGuests`\n  - `ReservationStatus status`: This is an enum from `com.filamentbarbaner.model.ReservationStatus` (defined in the `reservation-system-core` feature).\n  - `String specialRequests`\n\n### Controllers\n\n**3. `ReservationController.java`**\nThis controller handles public-facing reservation creation.\n- Annotate the class with `@RestController` and `@RequestMapping(\"/api/v1/reservations\")`.\n- Inject `ReservationService` from the `com.filamentbarbaner.service` package via constructor injection.\n  - `private final ReservationService reservationService;`\n- Implement the following method:\n  - **`public ResponseEntity<ReservationResponse> submitReservation(@Valid @RequestBody CreateReservationRequest request)`**\n    - Annotate this method with `@PostMapping`.\n    - **Logic:**\n      1. Call `reservationService.createReservation(request)`.\n      2. Wrap the returned `ReservationResponse` object in a `ResponseEntity` with HTTP status `201 CREATED`.\n    - **Error Handling:** The `@Valid` annotation will automatically trigger validation on the request body. Spring Boot's default exception handler will catch `MethodArgumentNotValidException` and return an HTTP `400 Bad Request` response.\n\n**4. `AdminReservationController.java`**\nThis controller handles protected, admin-only actions for managing reservations.\n- Annotate the class with `@RestController`, `@RequestMapping(\"/api/v1/admin/reservations\")`, and `@PreAuthorize(\"hasRole('ADMIN')\")` to secure all endpoints within it.\n- Inject `ReservationService` from the `com.filamentbarbaner.service` package via constructor injection.\n  - `private final ReservationService reservationService;`\n- To handle the status update request body, define a private static record inside the `AdminReservationController` class: `private static record UpdateStatusRequest(ReservationStatus status) {}`.\n- Implement the following methods:\n  - **`public ResponseEntity<List<ReservationResponse>> getAllReservations()`**\n    - Annotate this method with `@GetMapping`.\n    - **Logic:**\n      1. Call `reservationService.getAllReservations()`.\n      2. Return the resulting `List<ReservationResponse>` in a `ResponseEntity` with HTTP status `200 OK`.\n\n  - **`public ResponseEntity<ReservationResponse> updateReservationStatus(@PathVariable(\"id\") UUID id, @RequestBody UpdateStatusRequest request)`**\n    - Annotate this method with `@PutMapping(\"/{id}/status\")`.\n    - **Logic:**\n      1. Call `reservationService.updateReservationStatus(id, request.status())`. This method from the service returns an `Optional<ReservationResponse>`.\n      2. If the `Optional` contains a value, return it in a `ResponseEntity` with HTTP status `200 OK`.\n      3. If the `Optional` is empty (indicating the reservation was not found), return an empty `ResponseEntity` with HTTP status `404 Not Found`.\n\n### Cross-Feature Interaction\n- Both `ReservationController` and `AdminReservationController` depend on `ReservationService` from the `reservation-system-core` feature.\n- Ensure you are calling the correct `ReservationService` methods with the following exact signatures:\n  - `ReservationResponse createReservation(CreateReservationRequest request)`\n  - `List<ReservationResponse> getAllReservations()`\n  - `Optional<ReservationResponse> updateReservationStatus(UUID id, ReservationStatus status)`",
+    "change_required" : true
+  }, {
+    "feature_name" : "event-management",
+    "feature_display_name" : "Event Management",
+    "feature_type" : "BACKEND",
+    "file_paths" : [ "backend/src/main/java/com/filamentbarbaner/model/Event.java", "backend/src/main/java/com/filamentbarbaner/repository/EventRepository.java", "backend/src/main/java/com/filamentbarbaner/service/EventService.java", "backend/src/main/java/com/filamentbarbaner/controller/EventController.java", "backend/src/main/java/com/filamentbarbaner/controller/AdminEventController.java", "backend/src/main/java/com/filamentbarbaner/dto/EventDto.java" ],
+    "feature_instruction" : "This feature implements the full lifecycle for managing events at Filament Bar. It includes a public-facing read-only API for upcoming events and a separate, secured admin API for creating, updating, and deleting events.\n\n### Data Model and DTO\n\n**1. `Event.java` (Entity)**\nThis is the JPA entity representing an event. Annotate it with `@Entity` and `@Table(name = \"events\")`. Use Lombok's `@Data`, `@NoArgsConstructor`, and `@AllArgsConstructor` for boilerplate code.\n\n- **`id` (UUID):** The primary key. Annotate with `@Id` and `@GeneratedValue(strategy = GenerationType.AUTO)`.\n- **`name` (String):** The event name. Annotate with `@Column(nullable = false)`.\n- **`description` (String):** A detailed description. Annotate with `@Column(columnDefinition = \"TEXT\", nullable = false)`.\n- **`eventDate` (LocalDate):** The date of the event. Annotate with `@Column(nullable = false)`.\n- **`startTime` (LocalTime):** The start time. Annotate with `@Column(nullable = false)`.\n- **`imageUrl` (String):** An optional URL for a promotional image.\n\n**2. `EventDto.java` (Data Transfer Object)**\nThis is a Java `record` used for API communication. It will contain validation annotations.\n\n- **`id` (UUID):** The event's unique identifier.\n- **`name` (String):** Annotate with `@NotBlank`.\n- **`description` (String):** Annotate with `@NotBlank`.\n- **`eventDate` (LocalDate):** Annotate with `@NotNull` and `@FutureOrPresent`.\n- **`startTime` (LocalTime):** Annotate with `@NotNull`.\n- **`imageUrl` (String):** Optional image URL.\n\n### Data Access Layer\n\n**3. `EventRepository.java` (Repository)**\nThis interface handles database operations for the `Event` entity.\n\n- It must extend `JpaRepository<Event, UUID>`.\n- Define the following method signature. Spring Data JPA will provide the implementation based on the method name.\n  - `List<Event> findAllByEventDateAfter(LocalDate date);`\n\n### Business Logic Layer\n\n**4. `EventService.java` (Service)**\nThis class contains the core business logic for events. Annotate it with `@Service`.\n\n- **Dependencies:** Inject `EventRepository` via constructor injection.\n- **Mapping Logic:** Implement private helper methods to map between `Event` entities and `EventDto` records.\n  - `private EventDto toDto(Event event)`\n  - `private Event toEntity(EventDto eventDto)`\n\n- **Public Methods:**\n\n  - **`List<EventDto> getUpcomingEvents()`**\n    1. Get the current date minus one day to include today's events: `LocalDate.now().minusDays(1)`.\n    2. Call `eventRepository.findAllByEventDateAfter()` with this date.\n    3. Map the resulting `List<Event>` to a `List<EventDto>` using the `toDto` helper.\n    4. Return the list of DTOs.\n\n  - **`EventDto createEvent(EventDto eventDto)`**\n    1. Map the incoming `eventDto` to an `Event` entity using the `toEntity` helper.\n    2. Save the entity using `eventRepository.save(event)`.\n    3. Map the returned (and persisted) `Event` entity back to an `EventDto`.\n    4. Return the new `EventDto`.\n\n  - **`Optional<EventDto> updateEvent(UUID id, EventDto eventDto)`**\n    1. Find the existing event using `eventRepository.findById(id)`.\n    2. If no event is found, return `Optional.empty()`.\n    3. If an event is found, update its properties (`name`, `description`, `eventDate`, `startTime`, `imageUrl`) from the `eventDto`.\n    4. Save the updated entity using `eventRepository.save()`.\n    5. Map the saved entity to an `EventDto` and return it wrapped in `Optional.of()`.\n\n  - **`void deleteEvent(UUID id)`**\n    1. Check if an event exists with the given `id` using `eventRepository.existsById(id)`.\n    2. If it does not exist, throw a `RuntimeException` (e.g., `EntityNotFoundException`) with a message like \"Event not found with id: {id}\".\n    3. If it exists, call `eventRepository.deleteById(id)`.\n\n### API Layer\n\n**5. `EventController.java` (Public API)**\nThis controller exposes the public endpoint for fetching events. Annotate with `@RestController` and `@RequestMapping(\"/api/v1/events\")`.\n\n- **Dependencies:** Inject `EventService`.\n- **Endpoint:**\n  - **`ResponseEntity<List<EventDto>> getUpcomingEvents()`**\n    1. Annotate with `@GetMapping`.\n    2. Call `eventService.getUpcomingEvents()`.\n    3. Return the result with an HTTP 200 OK status using `ResponseEntity.ok()`.\n\n**6. `AdminEventController.java` (Admin API)**\nThis controller exposes secured endpoints for managing events. Annotate with `@RestController` and `@RequestMapping(\"/api/v1/admin/events\")`.\n\n- **Dependencies:** Inject `EventService`.\n- **Security:** Annotate each method with `@PreAuthorize(\"hasRole('ADMIN')\")`.\n\n- **Endpoints:**\n\n  - **`ResponseEntity<EventDto> createEvent(@Valid @RequestBody EventDto eventDto)`**\n    1. Annotate with `@PostMapping`.\n    2. Call `eventService.createEvent(eventDto)`.\n    3. Return the created `EventDto` with an HTTP 201 Created status using `ResponseEntity.status(HttpStatus.CREATED).body(createdEvent)`.\n\n  - **`ResponseEntity<EventDto> updateEvent(@PathVariable UUID id, @Valid @RequestBody EventDto eventDto)`**\n    1. Annotate with `@PutMapping(\"/{id}\")`.\n    2. Call `eventService.updateEvent(id, eventDto)`.\n    3. If the result is present, return it with `ResponseEntity.ok()`.\n    4. If the result is empty (event not found), return `ResponseEntity.notFound().build()`.\n\n  - **`ResponseEntity<Void> deleteEvent(@PathVariable UUID id)`**\n    1. Annotate with `@DeleteMapping(\"/{id}\")`.\n    2. Call `eventService.deleteEvent(id)`.\n    3. Return an HTTP 204 No Content status using `ResponseEntity.noContent().build()`.\n    4. **Error Handling:** Create a `@ControllerAdvice` or use an existing one to handle the `EntityNotFoundException` thrown by the service, returning an HTTP 404 Not Found response.",
+    "change_required" : true
+  }, {
+    "feature_name" : "core-ui",
+    "feature_display_name" : "Core UI",
+    "feature_type" : "FRONTEND",
+    "file_paths" : [ "frontend/src/api/client.ts", "frontend/src/App.tsx", "frontend/src/components/Layout.tsx", "frontend/src/components/Header.tsx", "frontend/src/components/Footer.tsx", "frontend/src/components/Seo.tsx", "frontend/src/pages/HomePage.tsx", "frontend/src/pages/ContactPage.tsx" ],
+    "feature_instruction" : "### Feature: Core UI\n\nThis feature establishes the foundational user interface for the Filament Bar application. It includes the main application shell, layout components (header, footer), core pages (Home, Contact), API client configuration, and the primary routing structure.\n\n#### File: `frontend/src/api/client.ts`\n\nThis file configures and exports a singleton Axios instance for all API communication.\n\n**Variable: `apiClient`**\n- **Type**: `AxiosInstance`\n- **Logic**:\n  1. Create an Axios instance using `axios.create()`.\n  2. Configure the `baseURL` by reading the `VITE_API_URL` environment variable from `import.meta.env`.\n  3. Add a request interceptor to the instance.\n  4. Inside the interceptor's success callback, retrieve the JWT token from `localStorage.getItem('authToken')`.\n  5. If a token exists, add an `Authorization` header to the request config: `config.headers.Authorization = `Bearer ${token}`;`.\n  6. Return the modified config.\n  7. Export the configured instance as `apiClient`.\n\n#### File: `frontend/src/components/Seo.tsx`\n\nThis component injects LocalBusiness schema.org JSON-LD markup for SEO purposes.\n\n**Component: `Seo`**\n- **Signature**: `(): JSX.Element`\n- **Logic**:\n  1. Define a JavaScript object `schemaData` with the following structure and content for \"Filament Bar (Baner)\":\n     ```\n\njson\n     {\n       \"@context\": \"https://schema.org\",\n       \"@type\": \"BarOrPub\",\n       \"name\": \"Filament Bar (Baner)\",\n       \"address\": {\n         \"@type\": \"PostalAddress\",\n         \"streetAddress\": \"123 High Street, Baner\",\n         \"addressLocality\": \"Pune\",\n         \"postalCode\": \"411045\",\n         \"addressRegion\": \"MH\",\n         \"addressCountry\": \"IN\"\n       },\n       \"telephone\": \"+91-9876543210\",\n       \"email\": \"contact@filamentbar.com\",\n       \"url\": \"https://www.filamentbar.com\",\n       \"image\": \"/path/to/logo-or-hero-image.jpg\",\n       \"priceRange\": \"₹₹\",\n       \"servesCuisine\": \"Cocktails, Continental\",\n       \"openingHoursSpecification\": [\n         {\n           \"@type\": \"OpeningHoursSpecification\",\n           \"dayOfWeek\": [\n             \"Monday\",\n             \"Tuesday\",\n             \"Wednesday\",\n             \"Thursday\",\n             \"Sunday\"\n           ],\n           \"opens\": \"18:00\",\n           \"closes\": \"23:59\"\n         },\n         {\n           \"@type\": \"OpeningHoursSpecification\",\n           \"dayOfWeek\": [\n             \"Friday\",\n             \"Saturday\"\n           ],\n           \"opens\": \"18:00\",\n           \"closes\": \"01:30\"\n         }\n       ]\n     }\n     \n\n```\n  2. Render a `<script>` tag of type `application/ld+json`.\n  3. Use `dangerouslySetInnerHTML` on the script tag to inject the `schemaData` object after converting it to a JSON string with `JSON.stringify()`.\n  4. The component should return `null` or be wrapped in a fragment as it produces no visible output.\n\n#### File: `frontend/src/components/Header.tsx`\n\nThis component renders the main navigation bar for the application.\n\n**Component: `Header`**\n- **Signature**: `(): JSX.Element`\n- **Styling**:\n  - The header element should have a dark background: `bg-[#1A1A1A]`.\n  - All text links should be `text-[#F5F5F5]`.\n  - Use `react-router-dom`'s `NavLink` component for navigation links.\n  - The active `NavLink` should have the accent color `text-[#FFB800]`.\n- **Structure & Logic**:\n  1. Create a state variable `isMenuOpen` (boolean, default `false`) to manage the mobile menu visibility.\n  2. The main container should be a `<header>` tag with `bg-[#1A1A1A]` and padding.\n  3. Inside, use a flex container to align items: the logo on the left, navigation in the center, and a mobile menu button on the right.\n  4. **Logo**: Display \"Filament\" as text or an SVG logo, linking to the home page (`/`).\n  5. **Desktop Navigation**: For screen sizes `md` and above, display a list of `NavLink` components for: `Home (/)`, `Menu (/menu)`, `Events (/events)`, `Reservations (/reservations)`, `Contact (/contact)`.\n  6. **Mobile Menu Button**: For screen sizes below `md`, display a hamburger menu icon button. Its `onClick` handler should toggle the `isMenuOpen` state.\n  7. **Mobile Navigation Menu**: Render this section conditionally based on `isMenuOpen`. It should be a full-width dropdown or overlay below the header, displaying the same navigation links as the desktop version, stacked vertically.\n\n#### File: `frontend/src/components/Footer.tsx`\n\nThis component renders the site-wide footer.\n\n**Component: `Footer`**\n- **Signature**: `(): JSX.Element`\n- **Styling**:\n  - The footer element should have a dark background `bg-[#1A1A1A]` and light text `text-[#F5F5F5]`.\n- **Structure & Logic**:\n  1. The main container is a `<footer>` tag with `bg-[#1A1A1A]` and appropriate padding.\n  2. Use a grid or flexbox layout to create three columns.\n  3. **Column 1: Contact Info**\n     - Heading: \"Contact Us\"\n     - Address: \"123 High Street, Baner, Pune, 411045\"\n     - Phone: \"+91-9876543210\"\n     - Email: \"contact@filamentbar.com\"\n  4. **Column 2: Quick Links**\n     - Heading: \"Navigate\"\n     - A list of links to the main pages: Home, Menu, Events, Reservations, Contact.\n  5. **Column 3: Social Media**\n     - Heading: \"Follow Us\"\n     - A row of social media icons (e.g., from `react-icons`) for Facebook, Instagram, and Twitter, each wrapped in an `<a>` tag pointing to a placeholder URL.\n  6. Below the columns, add a full-width section with a horizontal rule and the copyright notice: \"© {new Date().getFullYear()} Filament Bar. All rights reserved.\"\n\n#### File: `frontend/src/components/Layout.tsx`\n\nThis component provides a consistent page structure by wrapping page content with the `Header` and `Footer`.\n\n**Component: `Layout`**\n- **Signature**: `({ children: React.ReactNode }): JSX.Element`\n- **Logic**:\n  1. Render a `<div>` as the root container.\n  2. Render the `<Seo />` component.\n  3. Render the `<Header />` component.\n  4. Render a `<main>` element that contains the `children` prop.\n  5. Render the `<Footer />` component.\n\n#### File: `frontend/src/pages/HomePage.tsx`\n\nThis is the main landing page for Filament Bar.\n\n**Component: `HomePage`**\n- **Signature**: `(): JSX.Element`\n- **Logic**:\n  1. Wrap the entire page content in the `<Layout>` component.\n  2. **Hero Section**:\n     - A full-width section with a dark, high-quality background image of a cocktail or the bar's interior.\n     - An overlay with `bg-black/60` for text readability.\n     - A central content block with:\n       - `h1` heading: \"Experience the Spark.\" with `text-[#F5F5F5]`.\n       - `p` subheading: \"Craft Cocktails & Live Music in the Heart of Baner.\" with `text-[#F5F5F5]`.\n       - A call-to-action button styled with `bg-[#FFB800]` and `text-[#1A1A1A]`, reading \"Book Your Table\", which navigates to `/reservations`.\n  3. **Featured Cocktails Section**:\n     - A section with a heading `h2`: \"Our Signature Creations\".\n     - A grid layout displaying 3-4 placeholder cocktail cards. Each card should have:\n       - An image of a cocktail.\n       - A name (e.g., \"The Filament\", \"Electric Elixir\").\n       - A brief description.\n  4. **Upcoming Events Preview Section**:\n     - A section with a heading `h2`: \"This Week at Filament\".\n     - A paragraph inviting users to see the full schedule: \"From live jazz to DJ nights, there's always a vibe. Check our events page for the latest lineup.\"\n     - A button styled with `border border-[#FFB800]` and `text-[#FFB800]` reading \"See All Events\", which navigates to `/events`.\n\n#### File: `frontend/src/pages/ContactPage.tsx`\n\nThis page displays contact information and a map.\n\n**Component: `ContactPage`**\n- **Signature**: `(): JSX.Element`\n- **Logic**:\n  1. Wrap the entire page content in the `<Layout>` component.\n  2. Create a main container with a heading `h1`: \"Get In Touch\".\n  3. Use a two-column layout.\n  4. **Left Column: Contact Details**\n     - **Address**: Display the full address.\n     - **Phone**: Display the phone number inside an `<a>` tag with `href=\"tel:+919876543210\"`. This enables the click-to-call feature. Add text like \"(Click to Call)\".\n     - **Email**: Display the email address.\n     - **Opening Hours**: List the opening hours for each day of the week.\n  5. **Right Column: Google Map**\n     - Embed a Google Map using an `<iframe>`. The `src` should point to the location of Filament Bar (Baner). Use a placeholder URL if the exact one is not available.\n\n#### File: `frontend/src/App.tsx`\n\nThis is the root component of the application, responsible for setting up providers and routing.\n\n**Component: `App`**\n- **Signature**: `(): JSX.Element`\n- **Logic**:\n  1. Import necessary components: `BrowserRouter`, `Routes`, `Route` from `react-router-dom`; `QueryClient`, `QueryClientProvider` from `@tanstack/react-query`; `AuthProvider` from `frontend/src/context/AuthContext.tsx`; `ProtectedRoute` from `frontend/src/components/ProtectedRoute.tsx`; and all page components.\n  2. Instantiate a new `QueryClient`.\n  3. The top-level component should be `BrowserRouter`.\n  4. Inside `BrowserRouter`, wrap the application with `QueryClientProvider`, passing the client instance.\n  5. Inside `QueryClientProvider`, wrap the application with `AuthProvider` (imported from the `auth-ui` feature).\n  6. Inside `AuthProvider`, define the application's routes using the `Routes` component.\n  7. **Route Definitions**:\n     - `<Route path=\"/\" element={<HomePage />} />`\n     - `<Route path=\"/menu\" element={<MenuPage />} />` (from `menu-ui`)\n     - `<Route path=\"/reservations\" element={<ReservationPage />} />` (from `reservation-booking`)\n     - `<Route path=\"/events\" element={<EventsPage />} />` (from `events-calendar`)\n     - `<Route path=\"/contact\" element={<ContactPage />} />`\n     - `<Route path=\"/login\" element={<LoginPage />} />` (from `auth-ui`)\n     - `<Route path=\"/admin\" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />` (from `auth-ui`)",
+    "change_required" : true
+  }, {
+    "feature_name" : "auth-ui",
+    "feature_display_name" : "Authentication UI",
+    "feature_type" : "FRONTEND",
+    "file_paths" : [ "frontend/src/context/AuthContext.tsx", "frontend/src/hooks/useAuth.ts", "frontend/src/services/authService.ts", "frontend/src/components/ProtectedRoute.tsx", "frontend/src/pages/LoginPage.tsx", "frontend/src/pages/AdminDashboardPage.tsx" ],
+    "feature_instruction" : "This feature implements the complete frontend authentication flow for the Filament Bar admin portal. It includes a login page, a protected admin dashboard, and the underlying services and context for managing authentication state.\n\n### Shared Data Types\n\nFirst, define these shared types, likely in a `frontend/src/types/auth.ts` file or directly within the files that use them.\n\n**`AuthRequest`**: Represents the credentials sent to the login endpoint.\n```\n\ntypescript\nexport interface AuthRequest {\n  email: string;\n  password: string;\n}\n\n\n```\n\n**`AuthResponse`**: Represents the data received from the backend upon successful login.\n```\n\ntypescript\nexport interface AuthResponse {\n  token: string;\n  role: string;\n}\n\n\n```\n\n**`AuthContextType`**: Defines the shape of the authentication context provided to the application.\n```\n\ntypescript\nexport interface AuthContextType {\n  token: string | null;\n  role: string | null;\n  isAuthenticated: boolean;\n  isAdmin: boolean;\n  isLoading: boolean;\n  login: (credentials: AuthRequest) => Promise<void>;\n  logout: () => void;\n}\n\n\n```\n\n--- \n\n### 1. Service Layer: `frontend/src/services/authService.ts`\n\nThis file handles communication with the backend authentication API.\n\n**Dependencies:**\n- Import `apiClient` from `frontend/src/api/client.ts`.\n- Import `AuthRequest` and `AuthResponse` types.\n\n**Public Functions:**\n\n**`login(credentials: AuthRequest): Promise<AuthResponse>`**\n1.  Make a POST request to the backend API endpoint `/api/v1/auth/login` using the `apiClient`.\n2.  Pass the `credentials` object as the request body.\n3.  The `apiClient` is expected to handle standard HTTP errors.\n4.  On a successful response (HTTP 200), return the response data which will be of type `AuthResponse`.\n\n### 2. Context Layer: `frontend/src/context/AuthContext.tsx`\n\nThis file creates and manages the global authentication state.\n\n**Dependencies:**\n- `React`, `createContext`, `useState`, `useEffect`, `useMemo`.\n- `authService` from `frontend/src/services/authService.ts`.\n- `AuthRequest`, `AuthResponse`, `AuthContextType` types.\n\n**Implementation Details:**\n1.  Create a `AuthContext` using `createContext<AuthContextType | undefined>(undefined)`.\n\n2.  **`AuthProvider({ children: React.ReactNode }): JSX.Element`**\n    -   **State Management:**\n        -   `const [token, setToken] = useState<string | null>(null);`\n        -   `const [role, setRole] = useState<string | null>(null);`\n        -   `const [isLoading, setIsLoading] = useState<boolean>(true);` // Start as true to check localStorage\n\n    -   **Initialization `useEffect`:**\n        -   Create a `useEffect` hook that runs once on component mount (`[]` dependency array).\n        -   Inside, try to retrieve `'token'` and `'role'` from `localStorage`.\n        -   If a token is found, set the `token` and `role` state with these values.\n        -   Set `isLoading` to `false` after checking `localStorage`.\n\n    -   **`login` function:**\n        -   `async function login(credentials: AuthRequest): Promise<void>`\n        -   **Logic:**\n            1.  Set `isLoading(true)`.\n            2.  Wrap the API call in a `try...catch...finally` block.\n            3.  **`try`**: Call `authService.login(credentials)`.\n            4.  On success, destructure `token` and `role` from the response.\n            5.  Update state: `setToken(token)` and `setRole(role)`.\n            6.  Persist to storage: `localStorage.setItem('token', token)` and `localStorage.setItem('role', role)`.\n            7.  **`catch`**: If an error occurs, log it and re-throw it so the UI layer can handle it.\n            8.  **`finally`**: Set `isLoading(false)`.\n\n    -   **`logout` function:**\n        -   `function logout(): void`\n        -   **Logic:**\n            1.  Set state to null: `setToken(null)` and `setRole(null)`.\n            2.  Clear from storage: `localStorage.removeItem('token')` and `localStorage.removeItem('role')`.\n\n    -   **Derived State with `useMemo`:**\n        -   `const isAuthenticated = useMemo(() => !!token, [token]);`\n        -   `const isAdmin = useMemo(() => isAuthenticated && role === 'ADMIN', [isAuthenticated, role]);`\n\n    -   **Context Provider Value:**\n        -   Create a `value` object containing `token`, `role`, `isAuthenticated`, `isAdmin`, `isLoading`, `login`, and `logout`.\n        -   Return `<AuthContext.Provider value={value}>{children}</AuthContext.Provider>`.\n\n### 3. Hook Layer: `frontend/src/hooks/useAuth.ts`\n\nThis custom hook simplifies access to the `AuthContext`.\n\n**Dependencies:**\n- `useContext` from `React`.\n- `AuthContext` from `frontend/src/context/AuthContext.tsx`.\n\n**Public Functions:**\n\n**`useAuth(): AuthContextType`**\n1.  Get the context using `const context = useContext(AuthContext);`.\n2.  If `context` is `undefined`, throw an error: `'useAuth must be used within an AuthProvider'`.\n3.  Return the `context`.\n\n### 4. Component Layer: `frontend/src/components/ProtectedRoute.tsx`\n\nThis component guards routes that require authentication.\n\n**Dependencies:**\n- `Navigate`, `useLocation` from `react-router-dom`.\n- `useAuth` from `frontend/src/hooks/useAuth.ts`.\n\n**Public Functions:**\n\n**`ProtectedRoute({ children: JSX.Element }): JSX.Element`**\n1.  Get authentication state using `const { isAuthenticated, isLoading } = useAuth();`.\n2.  Get the current location: `const location = useLocation();`.\n3.  If `isLoading` is `true`, return a loading spinner or null to prevent rendering before auth state is confirmed.\n4.  If `isAuthenticated` is `false`, return `<Navigate to=\"/login\" state={{ from: location }} replace />`.\n5.  If `isAuthenticated` is `true`, render the `children`.\n\n### 5. Page Layer: `frontend/src/pages/LoginPage.tsx`\n\nThis page provides the user interface for admin login.\n\n**Dependencies:**\n- `useAuth` from `frontend/src/hooks/useAuth.ts`.\n- `useNavigate` from `react-router-dom`.\n- `useForm` from `react-hook-form`.\n- `zod` and `zodResolver` for validation.\n- `useState` for handling login errors.\n\n**Implementation Details:**\n1.  **Form Schema:** Define a Zod schema for validation:\n    ```\n\ntypescript\n    const loginSchema = z.object({\n      email: z.string().email('Invalid email address'),\n      password: z.string().min(1, 'Password is required'),\n    });\n    type LoginFormValues = z.infer<typeof loginSchema>;\n    \n\n```\n2.  **Component Logic:**\n    -   `const { login, isAuthenticated } = useAuth();`\n    -   `const navigate = useNavigate();`\n    -   `const [loginError, setLoginError] = useState<string | null>(null);`\n    -   Initialize `react-hook-form` using `zodResolver(loginSchema)`.\n    -   If `isAuthenticated` is true, use `useEffect` to `navigate('/admin/dashboard', { replace: true });`.\n3.  **Submit Handler `onSubmit(data: LoginFormValues)`:**\n    -   Set `loginError(null)`.\n    -   Call `await login(data)`.\n    -   After successful login, `react-router-dom` will automatically redirect from the `ProtectedRoute` or you can navigate manually to `/admin/dashboard`.\n    -   In a `catch` block, set `setLoginError('Invalid email or password. Please try again.');`.\n4.  **UI (JSX):**\n    -   The page should have a dark background: `bg-[#1A1A1A] text-[#F5F5F5]`.\n    -   Render a centered form container.\n    -   Use a heading like `<h1>Filament Bar Admin Login</h1>`.\n    -   The form should contain two controlled input fields for `email` and `password` registered with `react-hook-form`.\n    -   Display validation errors for each field.\n    -   Display the `loginError` message if it exists.\n    -   The submit button should say \"Log In\" and have an accent background: `bg-[#FFB800] text-[#1A1A1A]`.\n    -   Disable the button while the form is submitting (`formState.isSubmitting`).\n\n### 6. Page Layer: `frontend/src/pages/AdminDashboardPage.tsx`\n\nThis is the main hub for authenticated administrators.\n\n**Dependencies:**\n- `Link` from `react-router-dom`.\n- `useAuth` from `frontend/src/hooks/useAuth.ts`.\n\n**Public Functions:**\n\n**`AdminDashboardPage(): JSX.Element`**\n1.  Get the `logout` function: `const { logout } = useAuth();`\n2.  **Layout:**\n    -   Use a two-column layout (e.g., using Flexbox or Grid).\n    -   The main container should have a dark background: `bg-[#1A1A1A] text-[#F5F5F5]`.\n    -   **Sidebar (Left Column):**\n        -   A vertical navigation menu with a slightly darker background.\n        -   Include `Link` components for navigation:\n            -   `<Link to=\"/admin/menu\">Manage Menu</Link>`\n            -   `<Link to=\"/admin/reservations\">Manage Reservations</Link>`\n            -   `<Link to=\"/admin/events\">Manage Events</Link>`\n        -   Style links with hover effects, e.g., `hover:text-[#FFB800]`.\n        -   Include a \"Logout\" button at the bottom of the sidebar that calls the `logout` function on click.\n    -   **Main Content (Right Column):**\n        -   Display a welcome heading: `<h1>Admin Dashboard</h1>`.\n        -   Include placeholder text: `Welcome to the Filament Bar administration panel. Select an option from the sidebar to get started.`\n\n### Integration\n\nTo make this feature work, the main application component (`App.tsx` from `core-ui`) must be updated:\n1.  Wrap the entire application's routes within the `<AuthProvider>`.\n2.  Define the admin routes (e.g., `/admin/dashboard`, `/admin/menu`, etc.) and wrap each of them with the `<ProtectedRoute>` component.\n\nExample Route Structure in `App.tsx`:\n```\n\njsx\n<AuthProvider>\n  <Routes>\n    {/* Public Routes */}\n    <Route path=\"/login\" element={<LoginPage />} />\n\n    {/* Protected Admin Routes */}\n    <Route path=\"/admin/dashboard\" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />\n    {/* ... other admin routes ... */}\n  </Routes>\n</AuthProvider>\n\n\n```",
+    "change_required" : true
+  }, {
+    "feature_name" : "menu-ui",
+    "feature_display_name" : "Menu UI",
+    "feature_type" : "FRONTEND",
+    "file_paths" : [ "frontend/src/pages/MenuPage.tsx", "frontend/src/hooks/useMenu.ts", "frontend/src/services/menuService.ts", "frontend/src/pages/AdminMenuPage.tsx", "frontend/src/services/adminMenuService.ts" ],
+    "feature_instruction" : "### Feature: Menu UI\n\nThis feature implements the user interface for both the public-facing menu and the administrative menu management dashboard for Filament Bar. It includes services for API communication, a React Query hook for data fetching, and two page components.\n\n#### **1. Shared Types**\n\nFirst, create a new file `frontend/src/types/menu.ts` to define shared types for this feature. This will ensure consistency.\n\n**`frontend/src/types/menu.ts`**\n```\n\ntypescript\nexport enum MenuItemCategory {\n  COCKTAIL = 'COCKTAIL',\n  MOCKTAIL = 'MOCKTAIL',\n  SMALL_PLATE = 'SMALL_PLATE',\n  MAIN_COURSE = 'MAIN_COURSE',\n  DESSERT = 'DESSERT',\n}\n\nexport interface MenuItemDto {\n  id: string;\n  name: string;\n  description: string;\n  price: number;\n  category: MenuItemCategory;\n  imageUrl: string;\n}\n\n\n```\n\n--- \n\n### **Part A: Public Menu Display**\n\nThis part covers fetching and displaying the menu for customers.\n\n#### **2. `frontend/src/services/menuService.ts`**\n\nThis service handles public API calls to fetch menu data.\n\n- **Dependencies:** Import the `apiClient` from `frontend/src/api/client.ts` and `MenuItemDto` from `frontend/src/types/menu.ts`.\n\n- **`getMenuItems(category?: string): Promise<MenuItemDto[]>`**\n  1.  Make a GET request to `/api/v1/menu-items` using the `apiClient`.\n  2.  If the `category` parameter is provided, pass it as a URL query parameter (e.g., `/api/v1/menu-items?category=COCKTAIL`).\n  3.  The request will return a list of `MenuItemDto` objects.\n  4.  Return the `data` property from the axios response.\n\n#### **3. `frontend/src/hooks/useMenu.ts`**\n\nThis custom hook abstracts the menu data fetching logic using React Query.\n\n- **Dependencies:** Import `useQuery` from `@tanstack/react-query` and `getMenuItems` from `frontend/src/services/menuService.ts`.\n\n- **`useMenuItems(category?: string): { data, isLoading, isError }`**\n  1.  Call `useQuery` from `@tanstack/react-query`.\n  2.  Set the `queryKey` to `['menuItems', category || 'all']`. This ensures that queries are cached separately for each category.\n  3.  Set the `queryFn` to an anonymous function that calls `getMenuItems(category)`.\n  4.  Return the object `{ data, isLoading, isError }` provided by `useQuery`.\n\n#### **4. `frontend/src/pages/MenuPage.tsx`**\n\nThis page component renders the public-facing menu.\n\n- **Dependencies:** Import `React`, `useState` from 'react', `Layout` from `frontend/src/components/Layout.tsx`, `useMenuItems` from `frontend/src/hooks/useMenu.ts`, and `MenuItemCategory` from `frontend/src/types/menu.ts`.\n\n- **Component: `MenuPage(): JSX.Element`**\n  1.  Use `useState<MenuItemCategory | undefined>(undefined)` to manage the currently selected category filter. Let's call the state `selectedCategory` and setter `setSelectedCategory`.\n  2.  Call `const { data: menuItems, isLoading, isError } = useMenuItems(selectedCategory);` to fetch the menu items.\n  3.  Wrap the entire page content in the `<Layout>` component.\n  4.  **Design & Content:** The page should have a sophisticated, dark theme.\n      - **Main Container:** Use `className=\"bg-[#1A1A1A] text-[#F5F5F5] min-h-screen\"`.\n      - **Header Section:** Inside a `py-16 text-center` container, add:\n          - `h1` with text \"Our Menu\" and a subheading `p` with text \"Crafted Cocktails & Culinary Delights for the Discerning Palate.\"\n      - **Category Filters:**\n          - Render a `div` containing filter buttons for each value in `MenuItemCategory`, plus an \"All\" button.\n          - The active button should have styles like `bg-[#FFB800] text-[#1A1A1A]`. Inactive buttons should have `border border-[#FFB800] text-[#FFB800]`.\n          - The `onClick` handler for each button should call `setSelectedCategory` with the corresponding category value (or `undefined` for \"All\").\n      - **Menu Grid:**\n          - If `isLoading`, display a loading spinner or skeleton loaders.\n          - If `isError`, display an error message: \"Could not load the menu at this time. Please try again later.\"\n          - If `menuItems` is available, render a responsive grid (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8`).\n          - Map over the `menuItems` array and render a card for each item.\n      - **Menu Item Card:**\n          - A `div` with `bg-[#1c1c1e] rounded-lg overflow-hidden shadow-lg`.\n          - An `img` tag for `item.imageUrl` with `className=\"w-full h-48 object-cover\"`.\n          - A `div` for content with padding.\n          - `h3` for `item.name` with `className=\"text-xl font-bold text-[#FFB800]\"`.\n          - `p` for `item.description` with `className=\"text-sm text-gray-300 mt-2\"`.\n          - `p` for `item.price` formatted as `₹{item.price.toFixed(2)}` with `className=\"text-lg font-semibold text-[#00A9FF] mt-4\"`.\n\n--- \n\n### **Part B: Admin Menu Management**\n\nThis part covers the admin dashboard for CRUD operations on menu items.\n\n#### **5. `frontend/src/services/adminMenuService.ts`**\n\nThis service handles authenticated API calls for menu management.\n\n- **Dependencies:** Import `apiClient` and `MenuItemDto`.\n\n- **`createMenuItem(item: MenuItemDto): Promise<MenuItemDto>`**\n  1.  Makes a `POST` request to `/api/v1/admin/menu-items` with `item` as the request body.\n  2.  Returns the created `MenuItemDto` from the response data.\n\n- **`updateMenuItem(id: string, item: MenuItemDto): Promise<MenuItemDto>`**\n  1.  Makes a `PUT` request to `/api/v1/admin/menu-items/{id}` with `item` as the request body.\n  2.  Returns the updated `MenuItemDto` from the response data.\n\n- **`deleteMenuItem(id: string): Promise<void>`**\n  1.  Makes a `DELETE` request to `/api/v1/admin/menu-items/{id}`.\n  2.  Returns `void`.\n\n#### **6. `frontend/src/pages/AdminMenuPage.tsx`**\n\nThis page provides the UI for admins to manage the menu.\n\n- **Dependencies:** Import React hooks (`useState`, `useEffect`), React Query hooks (`useQueryClient`, `useMutation`), `useMenuItems` from `frontend/src/hooks/useMenu.ts`, all functions from `frontend/src/services/adminMenuService.ts`, and `MenuItemDto` and `MenuItemCategory` types.\n\n- **Component: `AdminMenuPage(): JSX.Element`**\n  1.  **Data Fetching:**\n      - Use `const { data: menuItems, isLoading } = useMenuItems();` to fetch all menu items.\n      - Get the `queryClient` instance using `useQueryClient()`.\n  2.  **State Management:**\n      - Use `useState` to manage the state of a modal for creating/editing items (e.g., `isModalOpen`).\n      - Use `useState` to hold the menu item currently being edited (e.g., `editingItem: MenuItemDto | null`).\n  3.  **Mutations:**\n      - **Create:** `const createMutation = useMutation({ mutationFn: createMenuItem, onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuItems'] }) });`\n      - **Update:** `const updateMutation = useMutation({ mutationFn: (variables: { id: string; item: MenuItemDto }) => updateMenuItem(variables.id, variables.item), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuItems'] }) });`\n      - **Delete:** `const deleteMutation = useMutation({ mutationFn: deleteMenuItem, onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuItems'] }) });`\n  4.  **UI Structure:**\n      - The page should be wrapped in an admin layout or the standard `Layout`.\n      - Display a heading: \"Menu Management\".\n      - A \"Create New Item\" button that opens the modal for creation (`setEditingItem(null); setIsModalOpen(true);`).\n      - Display a data table (e.g., using `@tanstack/react-table`) of `menuItems`.\n      - **Table Columns:** Name, Category, Price, Actions.\n      - **Actions Column:** Should contain an \"Edit\" button and a \"Delete\" button for each row.\n          - **Edit Button:** `onClick` should open the modal with the form pre-filled for that item (`setEditingItem(item); setIsModalOpen(true);`).\n          - **Delete Button:** `onClick` should call `deleteMutation.mutate(item.id)`, preferably after a confirmation dialog.\n  5.  **Create/Edit Modal Form:**\n      - Use a library like `react-hook-form` with `zod` for validation.\n      - The form should have input fields for `name` (text), `description` (textarea), `price` (number), `imageUrl` (text), and a `<select>` dropdown for `category` populated from `MenuItemCategory` enum.\n      - The form's `onSubmit` handler should check if `editingItem` exists.\n          - If it exists, call `updateMutation.mutate({ id: editingItem.id, item: formData })`.\n          - If not, call `createMutation.mutate(formData)`.\n      - On successful submission, close the modal.\n\n### **Wiring Summary**\n\n- **Public Flow:** `MenuPage` calls `useMenuItems`, which calls `getMenuItems` in `menuService`, which makes a `GET` request to `/api/v1/menu-items`.\n- **Admin Flow:** `AdminMenuPage` calls `useMenuItems` for data. Its buttons trigger `useMutation` hooks that call functions in `adminMenuService` (`createMenuItem`, `updateMenuItem`, `deleteMenuItem`), which in turn make `POST`, `PUT`, and `DELETE` requests to `/api/v1/admin/menu-items`.",
+    "change_required" : true
+  }, {
+    "feature_name" : "reservation-booking",
+    "feature_display_name" : "Reservation Booking UI",
+    "feature_type" : "FRONTEND",
+    "file_paths" : [ "frontend/src/pages/ReservationPage.tsx", "frontend/src/hooks/useReservations.ts", "frontend/src/services/reservationService.ts", "frontend/src/pages/AdminReservationsPage.tsx", "frontend/src/services/adminReservationService.ts" ],
+    "feature_instruction" : "This feature implements the complete reservation booking experience for Filament Bar, including a public-facing booking form and an admin-only management dashboard.\n\n### Shared Data Structures\n\nFirst, let's define the core data types that will be used across the feature. These should be defined in a central types file (e.g., `frontend/src/types/reservation.ts`) or at the top of the service files where they are first used.\n\n```\n\ntypescript\nexport type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\nexport interface CreateReservationRequest {\n  customerName: string;\n  customerEmail: string;\n  customerPhone: string;\n  reservationTime: string; // ISO 8601 format (e.g., '2024-09-15T19:30:00')\n  partySize: number;\n  specialRequests?: string;\n}\n\nexport interface ReservationResponse {\n  id: string;\n  customerName: string;\n  customerEmail: string;\n  customerPhone: string;\n  reservationTime: string; // ISO 8601 format\n  partySize: number;\n  status: ReservationStatus;\n  specialRequests?: string;\n}\n\n\n```\n\n--- \n\n### Part 1: Public Reservation Booking Flow\n\nThis flow allows customers to submit a reservation request through a public form.\n\n#### `frontend/src/services/reservationService.ts`\n\nThis service handles communication with the public reservation API.\n\n- **Imports**: Import the pre-configured `apiClient` from `frontend/src/api/client.ts`.\n- **`createReservation(data: CreateReservationRequest): Promise<ReservationResponse>`**: \n  1. This asynchronous function takes one argument, `data`, which is an object conforming to the `CreateReservationRequest` interface.\n  2. It makes a `POST` request to the `/api/v1/reservations` endpoint using the `apiClient`.\n  3. The `data` object is sent as the request body.\n  4. It returns the promise resolved with the server's response, which should conform to the `ReservationResponse` interface.\n  5. Handle potential API errors gracefully.\n\n#### `frontend/src/hooks/useReservations.ts`\n\nThis custom hook abstracts the state management for creating a reservation using `@tanstack/react-query`.\n\n- **Imports**: Import `useMutation`, `UseMutationResult` from `@tanstack/react-query` and `createReservation` from `reservationService.ts`.\n- **`useCreateReservation(): UseMutationResult<ReservationResponse, Error, CreateReservationRequest>`**: \n  1. This function takes no arguments.\n  2. It calls `useMutation` from `@tanstack/react-query`.\n  3. The `mutationFn` for `useMutation` should be the `createReservation` function from the service layer.\n  4. Return the result of the `useMutation` call. This provides the component with `mutate`, `isPending`, `isSuccess`, `isError`, etc.\n\n#### `frontend/src/pages/ReservationPage.tsx`\n\nThis page provides the customer-facing UI for booking a table.\n\n- **Component**: `ReservationPage(): JSX.Element`.\n- **Imports**: Import `React`, `Layout` from `frontend/src/components/Layout.tsx`, and `useCreateReservation` from `frontend/src/hooks/useReservations.ts`. Also import `useForm` from `react-hook-form`, `zodResolver` from `@hookform/resolvers/zod`, and `z` from `zod`.\n- **Layout & Styling**:\n  1. The entire page content should be wrapped in the `<Layout>` component.\n  2. The page should have a dark theme with a background color of `bg-[#1A1A1A]` and text color of `text-[#F5F5F5]`.\n  3. A main heading should read \"Reserve Your Experience at Filament\" in a large, sophisticated font.\n- **Form Implementation**:\n  1. Define a Zod schema that validates an object matching the `CreateReservationRequest` interface. Ensure `partySize` is a positive number and `reservationTime` is a valid date in the future.\n  2. Use the `useForm` hook with the `zodResolver` to manage form state and validation.\n  3. The form should contain controlled input fields for: `customerName` (text), `customerEmail` (email), `customerPhone` (tel), `partySize` (number), `reservationTime` (datetime-local), and `specialRequests` (textarea, optional).\n  4. Style inputs with dark backgrounds, light text, and focus rings using the accent color, e.g., `focus:ring-[#FFB800]`.\n  5. Display validation errors for each field.\n- **Submission Logic**:\n  1. Use the `useCreateReservation` hook to get the mutation function and its state.\n  2. The form's `onSubmit` handler should call `mutate(data)` with the validated form data.\n  3. While `isPending` is true, disable the submit button and show a loading indicator (e.g., a spinner).\n  4. The submit button should be styled prominently with `bg-[#FFB800]` and `text-[#1A1A1A]` and have text like \"Confirm Your Spot\".\n- **User Feedback**:\n  1. If `isSuccess` is true, hide the form and display a success message: \"Thank you! Your reservation request has been received. We will confirm with you shortly.\"\n  2. If `isError` is true, display a user-friendly error message below the form, e.g., \"Sorry, we couldn't process your reservation. Please try again later.\"\n\n--- \n\n### Part 2: Admin Reservation Management\n\nThis flow provides an admin interface to view all reservations and manage their status.\n\n#### `frontend/src/services/adminReservationService.ts`\n\nThis service handles communication with the protected admin reservation API.\n\n- **Imports**: Import `apiClient` from `frontend/src/api/client.ts`.\n- **`getAllReservations(): Promise<ReservationResponse[]>`**:\n  1. This asynchronous function takes no arguments.\n  2. It makes a `GET` request to `/api/v1/admin/reservations`.\n  3. It returns the promise resolved with the array of all reservations.\n- **`updateReservationStatus(id: string, status: string): Promise<ReservationResponse>`**:\n  1. This asynchronous function takes a reservation `id` (string) and a new `status` (string, should be one of `ReservationStatus` values).\n  2. It makes a `PUT` request to `/api/v1/admin/reservations/${id}/status`.\n  3. The request body must be a JSON object: `{ \"status\": status }`.\n  4. It returns the promise resolved with the updated reservation object.\n\n#### `frontend/src/pages/AdminReservationsPage.tsx`\n\nThis page provides the admin UI for managing reservations.\n\n- **Component**: `AdminReservationsPage(): JSX.Element`.\n- **Imports**: Import `React`, `useQuery`, `useMutation`, `useQueryClient` from `@tanstack/react-query`, and the service functions from `adminReservationService.ts`.\n- **Data Fetching**:\n  1. Use the `useQuery` hook to fetch all reservations. The query key should be `['reservations']` and the query function should be `getAllReservations`.\n  2. Handle the `isLoading` state by showing a loading spinner and the `isError` state by showing an error message.\n- **Data Display**:\n  1. The page should have a heading: \"Manage Reservations\".\n  2. Render the fetched reservation data in a table with a dark theme.\n  3. Table columns should include: Customer Name, Email, Phone, Party Size, Reservation Time (formatted for readability), Status, and Actions.\n  4. The `Status` column should display a styled badge based on the status value (e.g., yellow for PENDING, blue for CONFIRMED, red for CANCELLED).\n- **Status Update Logic**:\n  1. Get the `queryClient` instance using `useQueryClient()`.\n  2. Use the `useMutation` hook for updating the status. The mutation function will be a wrapper that calls `updateReservationStatus(id, status)`.\n  3. In the `onSuccess` callback of `useMutation`, invalidate the `['reservations']` query using `queryClient.invalidateQueries({ queryKey: ['reservations'] })` to automatically refetch the list and update the UI.\n  4. The `Actions` column in the table should contain a dropdown or buttons for each reservation.\n  5. For a 'PENDING' reservation, show 'Confirm' and 'Cancel' buttons. For a 'CONFIRMED' reservation, show a 'Cancel' button.\n  6. Clicking an action button should call the `mutate` function from the `useMutation` hook with the corresponding reservation `id` and the new `status`.",
+    "change_required" : true
+  }, {
+    "feature_name" : "events-calendar",
+    "feature_display_name" : "Events Calendar UI",
+    "feature_type" : "FRONTEND",
+    "file_paths" : [ "frontend/src/pages/EventsPage.tsx", "frontend/src/hooks/useEvents.ts", "frontend/src/services/eventService.ts", "frontend/src/pages/AdminEventsPage.tsx", "frontend/src/services/adminEventService.ts" ],
+    "feature_instruction" : null,
+    "change_required" : true
+  }, {
+    "feature_name" : "infrastructure",
+    "feature_display_name" : "Infrastructure",
+    "feature_type" : "INFRA",
+    "file_paths" : [ "Dockerfile", "docker-compose.yml", ".env.example", ".gitignore" ],
+    "feature_instruction" : null,
+    "change_required" : true
+  } ]
+}
