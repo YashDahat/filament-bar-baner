@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useMenuItems } from '@/hooks/useMenu';
-import { MenuItemDto } from '@/services/menuService';
+import { MenuItemDto } from '@/types/menu'; // Corrected import path for MenuItemDto
 
 // Define MenuItemCategory locally as a type alias and a runtime object to resolve TS1294
 export type MenuItemCategory = 'APPETIZER' | 'MAIN_COURSE' | 'DESSERT' | 'BEVERAGE' | 'COCKTAIL';

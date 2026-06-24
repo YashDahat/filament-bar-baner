@@ -1,16 +1,11 @@
 import { apiClient } from '@/api/client';
+import { MenuItemDto } from '@/types/menu';
 
-export interface MenuItemDto {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  // Add any other properties a menu item might have based on API contract
-}
-
-export const getMenuItems = async (category?: string): Promise<MenuItemDto[]> => {
-  const params = category ? { category } : {};
+export async function getMenuItems(category?: string): Promise<MenuItemDto[]> {
+  const params: { category?: string } = {};
+  if (category) {
+    params.category = category;
+  }
   const response = await apiClient.get<MenuItemDto[]>('/api/v1/menu-items', { params });
   return response.data;
-};
+}

@@ -60,8 +60,8 @@ const menuItemSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'), // Required as per DisplayMenuItemDto in types/menu.ts
   price: z.coerce.number().min(0.01, 'Price must be positive'),
-  category: z.nativeEnum(MenuItemCategory, { // FIX 2: Changed required_error/invalid_type_error to message for older Zod
-    invalid_type_error: 'Category is required', // Changed 'message' to 'invalid_type_error' for Zod v3 compatibility
+  category: z.nativeEnum(MenuItemCategory, {
+    message: 'Category is required', // FIX: Changed 'invalid_type_error' to 'message' for Zod v4+ compatibility
   }),
   imageUrl: z.string().url('Must be a valid URL').min(1, 'Image URL is required'), // Required as per DisplayMenuItemDto in types/menu.ts
   available: z.boolean().default(true), // Required by form instruction and AdminServiceMenuItemDto
@@ -79,7 +79,7 @@ export const AdminMenuPage: React.FC = () => {
   const [editingItem, setEditingItem] = useState<DisplayMenuItemDto | null>(null); // editingItem is DisplayMenuItemDto
 
   const form = useForm<MenuItemFormValues>({
-    resolver: zodResolver<MenuItemFormValues>(menuItemSchema), // Explicitly type zodResolver to match MenuItemFormValues
+    resolver: zodResolver(menuItemSchema), // FIX: Removed explicit generic type from zodResolver, let it infer
     defaultValues: {
       name: '',
       description: '',
