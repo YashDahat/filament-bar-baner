@@ -32,18 +32,8 @@ interface DisplayMenuItemDto {
   available: boolean; // Assuming available is present for display
 }
 
-// Define MenuServiceMenuItemDto locally based on the structure returned by useMenuItems
-// This type is inferred from the error messages, indicating it lacks 'available' and 'imageUrl'
-// compared to DisplayMenuItemDto and AdminServiceMenuItemDto.
-interface MenuServiceMenuItemDto {
-  id: string; // From useMenuItems, id is expected
-  name: string;
-  description?: string; // Optional in adminService, likely optional here too
-  price: number;
-  category: string; // String, needs casting to MenuItemCategory
-  // 'available' and 'imageUrl' are missing based on error and DisplayMenuItemDto
-}
-
+// Removed: interface MenuServiceMenuItemDto was causing type conflicts and is redundant.
+// The useMenuItems hook returns AdminServiceMenuItemDto.
 
 import Layout from '@/components/Layout'; // Fixed: changed to default import
 import { Button } from '@/components/ui/button';
@@ -55,8 +45,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
+// FIX 3: Inferred MenuItemFormValues interface from the Zod schema to resolve TS2322 and TS2345
+type MenuItemFormValues = z.infer<typeof menuItemSchema>;
+
 // Zod schema for form validation, incorporating all fields required by the instruction
-const menuItemSchema = z.object({
+// FIX: Explicitly type menuItemSchema as z.ZodSchema<MenuItemFormValues> to guide zodResolver's type inference.
+// This resolves TS2322 by ensuring the resolver's TFieldValues matches useForm's expectation (the schema's output type).
+const menuItemSchema: z.ZodSchema<MenuItemFormValues> = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'), // Required as per DisplayMenuItemDto in types/menu.ts
   price: z.coerce.number().min(0.01, 'Price must be positive'),
@@ -67,11 +62,9 @@ const menuItemSchema = z.object({
   available: z.boolean().default(true), // Required by form instruction and AdminServiceMenuItemDto
 });
 
-// FIX 3: Inferred MenuItemFormValues interface from the Zod schema to resolve TS2322 and TS2345
-type MenuItemFormValues = z.infer<typeof menuItemSchema>;
 
 export const AdminMenuPage: React.FC = () => {
-  // menuItems are MenuServiceMenuItemDto[] based on the useMenuItems hook and error context
+  // menuItems are AdminServiceMenuItemDto[] based on the useMenuItems hook
   const { data: menuItems, isLoading } = useMenuItems();
   const queryClient = useQueryClient();
 
@@ -79,7 +72,7 @@ export const AdminMenuPage: React.FC = () => {
   const [editingItem, setEditingItem] = useState<DisplayMenuItemDto | null>(null); // editingItem is DisplayMenuItemDto
 
   const form = useForm<MenuItemFormValues>({
-    resolver: zodResolver(menuItemSchema), // FIX: Removed explicit generic type from zodResolver, let it infer
+    resolver: zodResolver(menuItemSchema), // FIX: Removed explicit generic type to resolve TS2322 and TS2558
     defaultValues: {
       name: '',
       description: '',
@@ -140,19 +133,19 @@ export const AdminMenuPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // FIX 4a: Helper to transform MenuServiceMenuItemDto to DisplayMenuItemDto
-  const mapToDisplayMenuItem = (item: MenuServiceMenuItemDto): DisplayMenuItemDto => ({
-    id: item.id, // ID is always present for displayed items
+  // FIX 4a: Helper to transform AdminServiceMenuItemDto to DisplayMenuItemDto
+  const mapToDisplayMenuItem = (item: AdminServiceMenuItemDto): DisplayMenuItemDto => ({
+    id: item.id!, // Assert ID is present for existing items from the backend
     name: item.name,
     description: item.description || '', // Ensure description is a string
     price: item.price,
     category: item.category as MenuItemCategory, // Cast string category to enum
-    imageUrl: '', // MenuServiceMenuItemDto does not have imageUrl, provide a default empty string
-    available: true, // MenuServiceMenuItemDto does not have 'available', default to true for display
+    imageUrl: '', // AdminServiceMenuItemDto does not have imageUrl, provide a default empty string
+    available: item.available, // Use actual available status from AdminServiceMenuItemDto
   });
 
-  // FIX 4b: Changed parameter type to MenuServiceMenuItemDto and transform before setting editingItem
-  const handleEditClick = (item: MenuServiceMenuItemDto) => {
+  // FIX 4b: Changed parameter type to AdminServiceMenuItemDto and transform before setting editingItem
+  const handleEditClick = (item: AdminServiceMenuItemDto) => {
     setEditingItem(mapToDisplayMenuItem(item));
     setIsModalOpen(true);
   };
@@ -204,12 +197,12 @@ export const AdminMenuPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {menuItems?.map((item) => ( // item is MenuServiceMenuItemDto
-                  <TableRow key={item.id}>
+                {menuItems?.map((item) => ( // item is AdminServiceMenuItemDto
+                  <TableRow key={item.id!}> {/* FIX: Assert item.id is present for key */}
                     <TableCell className="font-medium">{item.name}</TableCell>
                     <TableCell>{item.category}</TableCell>
                     <TableCell>₹{item.price.toFixed(2)}</TableCell>
-                    <TableCell>Yes</TableCell> {/* FIX 5: Display 'Available' status, defaulting to Yes as MenuServiceMenuItemDto lacks it */}
+                    <TableCell>{item.available ? 'Yes' : 'No'}</TableCell> {/* FIX 5: Display actual 'Available' status */}
                     <TableCell className="text-right">
                       <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEditClick(item)}>
                         Edit
@@ -255,61 +248,4 @@ export const AdminMenuPage: React.FC = () => {
                 </Label>
                 <Input id="price" type="number" step="0.01" {...form.register('price')} className="col-span-3" />
                 {form.formState.errors.price && (
-                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.price.message}</p>
-                )}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category" className="text-right">
-                  Category
-                </Label>
-                <Select
-                  onValueChange={(value) => form.setValue('category', value as MenuItemCategory)}
-                  value={form.watch('category')}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(MenuItemCategory).map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category.replace(/_/g, ' ')}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.category && (
-                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.category.message}</p>
-                )}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="imageUrl" className="text-right">
-                  Image URL
-                </Label>
-                <Input id="imageUrl" {...form.register('imageUrl')} className="col-span-3" />
-                {form.formState.errors.imageUrl && (
-                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.imageUrl.message}</p>
-                )}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="available" className="text-right">
-                  Available
-                </Label>
-                <Switch
-                  id="available"
-                  checked={form.watch('available')}
-                  onCheckedChange={(checked) => form.setValue('available', checked)}
-                  className="col-span-3 justify-self-start"
-                />
-              </div>
-              <DialogFooter>
-                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
-                  {editingItem ? 'Save Changes' : 'Create Item'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </Layout>
-  );
-};
+                  <p className="col-start-2 col-span-

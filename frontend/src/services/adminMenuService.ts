@@ -1,13 +1,5 @@
 import { apiClient } from '@/api/client';
-
-export interface MenuItemDto {
-  id?: string;
-  name: string;
-  description?: string;
-  price: number;
-  category: string;
-  available: boolean;
-}
+import { MenuItemDto } from '@/types/menu';
 
 export const createMenuItem = async (item: MenuItemDto): Promise<MenuItemDto> => {
   const response = await apiClient.post<MenuItemDto>('/api/v1/admin/menu-items', item);
@@ -20,5 +12,5 @@ export const updateMenuItem = async (id: string, item: MenuItemDto): Promise<Men
 };
 
 export const deleteMenuItem = async (id: string): Promise<void> => {
-  await apiClient.delete(`/api/v1/admin/menu-items/${id}`);
+  await apiClient.delete<void>(`/api/v1/admin/menu-items/${id}`);
 };

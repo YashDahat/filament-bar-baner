@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useMenuItems } from '@/hooks/useMenu';
-import { MenuItemDto } from '@/types/menu'; // Corrected import path for MenuItemDto
+import { MenuItemDto } from '@/services/adminMenuService'; // Correctly import MenuItemDto from its defined service file
+
+// The local MenuItemDto definition is removed as the canonical type is imported from adminMenuService.
 
 // Define MenuItemCategory locally as a type alias and a runtime object to resolve TS1294
 export type MenuItemCategory = 'APPETIZER' | 'MAIN_COURSE' | 'DESSERT' | 'BEVERAGE' | 'COCKTAIL';
@@ -31,10 +33,14 @@ const MenuPage: React.FC = () => {
 
   // Map MenuItemDto (from useMenuItems) to DisplayMenuItemDto, adding a default imageUrl
   // and casting the category string to MenuItemCategory.
+  // The 'item' parameter is now correctly typed as MenuItemDto from adminMenuService,
+  // which has 'id?: string' and 'description?: string'.
+  // We assert 'item.id!' as it should always be present for fetched items,
+  // and provide a default for 'description' if it's undefined.
   const menuItems: DisplayMenuItemDto[] | undefined = data?.map((item: MenuItemDto) => ({
-    id: item.id,
+    id: item.id!, // Assert id is present for display, as it's optional in MenuItemDto
     name: item.name,
-    description: item.description,
+    description: item.description || '', // Provide default empty string if description is undefined
     price: item.price,
     category: item.category as MenuItemCategory, // Cast string from API to local MenuItemCategory type
     imageUrl: 'https://via.placeholder.com/300x200?text=No+Image', // Default placeholder image

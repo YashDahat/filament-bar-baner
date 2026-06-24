@@ -1,5 +1,5 @@
 import { apiClient } from '@/api/client';
-import { MenuItemDto } from '@/types/menu';
+import { MenuItemDto } from './adminMenuService';
 
 export async function getMenuItems(category?: string): Promise<MenuItemDto[]> {
   const params: { category?: string } = {};
