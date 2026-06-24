@@ -13,7 +13,7 @@ export interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);

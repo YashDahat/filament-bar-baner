@@ -6,8 +6,7 @@ export interface MenuItemDto {
   description: string;
   price: number;
   category: string;
-  imageUrl?: string;
-  available: boolean;
+  // Add any other properties a menu item might have based on API contract
 }
 
 export const getMenuItems = async (category?: string): Promise<MenuItemDto[]> => {
