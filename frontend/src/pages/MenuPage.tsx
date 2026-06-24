@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useMenuItems } from '@/hooks/useMenu';
-import { MenuItemDto } from '@/services/adminMenuService'; // Correctly import MenuItemDto from its defined service file
+import { MenuItemDto } from '@/types/menu'; // MenuItemDto is defined in '@/types/menu'
 
 // The local MenuItemDto definition is removed as the canonical type is imported from adminMenuService.
 

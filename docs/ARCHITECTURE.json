@@ -1473,7 +1473,7 @@
     "layer" : "SERVICE",
     "created_date" : "2024-07-27",
     "updated_date" : "2026-06-24",
-    "status" : "GENERATION_FAILED",
+    "status" : "GENERATED",
     "description" : "Service for public menu-related API calls.",
     "public_functions" : [ {
       "name" : "getMenuItems",

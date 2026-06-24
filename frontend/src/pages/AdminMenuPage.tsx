@@ -5,8 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import { useMenuItems } from '@/hooks/useMenu';
-// Import MenuItemDto from adminMenuService for mutation types, aliased to avoid conflict
-import { MenuItemDto as AdminServiceMenuItemDto, createMenuItem, updateMenuItem, deleteMenuItem } from '@/services/adminMenuService';
+// FIX: Removed MenuItemDto as it's not exported from adminMenuService. Define ServiceMenuItemDto locally.
+import { createMenuItem, updateMenuItem, deleteMenuItem } from '@/services/adminMenuService';
 
 // FIX 1: Changed enum to a type alias and a runtime object to resolve TS1294
 // This allows Object.values(MenuItemCategory) to work at runtime while providing type safety.
@@ -20,20 +20,32 @@ export const MenuItemCategory = {
   COCKTAIL: 'COCKTAIL' as MenuItemCategory,
 };
 
-// Define DisplayMenuItemDto locally, based on AdminServiceMenuItemDto but with imageUrl and required id
+// Define ServiceMenuItemDto locally, representing the type used by adminMenuService functions.
+// This type does not include 'imageUrl' as it's not part of the backend DTO for mutations.
+interface ServiceMenuItemDto {
+  id?: string; // Optional for creation, present for existing items
+  name: string;
+  description: string;
+  price: number;
+  category: MenuItemCategory;
+  available: boolean;
+}
+
+// Define DisplayMenuItemDto locally, based on ServiceMenuItemDto but with imageUrl and required id
 // This is to bridge the gap since '@/types/menu' is missing and useMenuItems returns items with imageUrl
+// FIX: Adjusted description to reflect ServiceMenuItemDto as base.
 interface DisplayMenuItemDto {
   id: string; // Assuming ID is always present for displayed items
   name: string;
   description: string; // Assuming description is always present for display
   price: number;
   category: MenuItemCategory; // Use the local enum
-  imageUrl: string; // Present in display, but not in AdminServiceMenuItemDto for mutations
+  imageUrl: string; // Present in display, but not in ServiceMenuItemDto for mutations
   available: boolean; // Assuming available is present for display
 }
 
 // Removed: interface MenuServiceMenuItemDto was causing type conflicts and is redundant.
-// The useMenuItems hook returns AdminServiceMenuItemDto.
+// The useMenuItems hook returns AdminServiceMenuItemDto. // FIX: This comment is now outdated.
 
 import Layout from '@/components/Layout'; // Fixed: changed to default import
 import { Button } from '@/components/ui/button';
@@ -49,9 +61,9 @@ import { Switch } from '@/components/ui/switch';
 type MenuItemFormValues = z.infer<typeof menuItemSchema>;
 
 // Zod schema for form validation, incorporating all fields required by the instruction
-// FIX: Explicitly type menuItemSchema as z.ZodSchema<MenuItemFormValues> to guide zodResolver's type inference.
-// This resolves TS2322 by ensuring the resolver's TFieldValues matches useForm's expectation (the schema's output type).
-const menuItemSchema: z.ZodSchema<MenuItemFormValues> = z.object({
+// FIX: Removed explicit type annotation z.ZodSchema<MenuItemFormValues> to resolve circular reference TS2502.
+// Zod's infer will correctly deduce MenuItemFormValues.
+const menuItemSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'), // Required as per DisplayMenuItemDto in types/menu.ts
   price: z.coerce.number().min(0.01, 'Price must be positive'),
@@ -64,7 +76,7 @@ const menuItemSchema: z.ZodSchema<MenuItemFormValues> = z.object({
 
 
 export const AdminMenuPage: React.FC = () => {
-  // menuItems are AdminServiceMenuItemDto[] based on the useMenuItems hook
+  // menuItems are ServiceMenuItemDto[] based on the useMenuItems hook (assuming it returns the backend DTO)
   const { data: menuItems, isLoading } = useMenuItems();
   const queryClient = useQueryClient();
 
@@ -106,7 +118,7 @@ export const AdminMenuPage: React.FC = () => {
   }, [editingItem, form]);
 
   const createMutation = useMutation({
-    mutationFn: createMenuItem, // Expects AdminServiceMenuItemDto
+    mutationFn: createMenuItem, // Expects ServiceMenuItemDto
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       setIsModalOpen(false);
@@ -114,7 +126,7 @@ export const AdminMenuPage: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (variables: { id: string; item: AdminServiceMenuItemDto }) => updateMenuItem(variables.id, variables.item), // Expects AdminServiceMenuItemDto
+    mutationFn: (variables: { id: string; item: ServiceMenuItemDto }) => updateMenuItem(variables.id, variables.item), // Expects ServiceMenuItemDto
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       setIsModalOpen(false);
@@ -133,19 +145,19 @@ export const AdminMenuPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // FIX 4a: Helper to transform AdminServiceMenuItemDto to DisplayMenuItemDto
-  const mapToDisplayMenuItem = (item: AdminServiceMenuItemDto): DisplayMenuItemDto => ({
+  // FIX 4a: Helper to transform ServiceMenuItemDto to DisplayMenuItemDto
+  const mapToDisplayMenuItem = (item: ServiceMenuItemDto): DisplayMenuItemDto => ({
     id: item.id!, // Assert ID is present for existing items from the backend
     name: item.name,
     description: item.description || '', // Ensure description is a string
     price: item.price,
     category: item.category as MenuItemCategory, // Cast string category to enum
-    imageUrl: '', // AdminServiceMenuItemDto does not have imageUrl, provide a default empty string
-    available: item.available, // Use actual available status from AdminServiceMenuItemDto
+    imageUrl: '', // ServiceMenuItemDto does not have imageUrl, provide a default empty string
+    available: item.available, // Use actual available status from ServiceMenuItemDto
   });
 
-  // FIX 4b: Changed parameter type to AdminServiceMenuItemDto and transform before setting editingItem
-  const handleEditClick = (item: AdminServiceMenuItemDto) => {
+  // FIX 4b: Changed parameter type to ServiceMenuItemDto and transform before setting editingItem
+  const handleEditClick = (item: ServiceMenuItemDto) => {
     setEditingItem(mapToDisplayMenuItem(item));
     setIsModalOpen(true);
   };
@@ -157,8 +169,8 @@ export const AdminMenuPage: React.FC = () => {
   };
 
   const onSubmit = (data: MenuItemFormValues) => {
-    // Construct AdminServiceMenuItemDto for the mutation, omitting imageUrl as it's not in AdminServiceMenuItemDto
-    const itemToSave: AdminServiceMenuItemDto = {
+    // Construct ServiceMenuItemDto for the mutation, omitting imageUrl as it's not in ServiceMenuItemDto
+    const itemToSave: ServiceMenuItemDto = {
       name: data.name,
       description: data.description,
       price: data.price,
@@ -197,7 +209,7 @@ export const AdminMenuPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {menuItems?.map((item) => ( // item is AdminServiceMenuItemDto
+                {menuItems?.map((item) => ( // item is ServiceMenuItemDto
                   <TableRow key={item.id!}> {/* FIX: Assert item.id is present for key */}
                     <TableCell className="font-medium">{item.name}</TableCell>
                     <TableCell>{item.category}</TableCell>
@@ -248,4 +260,61 @@ export const AdminMenuPage: React.FC = () => {
                 </Label>
                 <Input id="price" type="number" step="0.01" {...form.register('price')} className="col-span-3" />
                 {form.formState.errors.price && (
-                  <p className="col-start-2 col-span-
+                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.price.message}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="category" className="text-right">
+                  Category
+                </Label>
+                <Select onValueChange={(value: MenuItemCategory) => form.setValue('category', value)} value={form.watch('category')}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(MenuItemCategory).map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category.replace(/_/g, ' ')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {form.formState.errors.category && (
+                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.category.message}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="imageUrl" className="text-right">
+                  Image URL
+                </Label>
+                <Input id="imageUrl" {...form.register('imageUrl')} className="col-span-3" />
+                {form.formState.errors.imageUrl && (
+                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.imageUrl.message}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="available" className="text-right">
+                  Available
+                </Label>
+                <Switch
+                  id="available"
+                  checked={form.watch('available')}
+                  onCheckedChange={(checked) => form.setValue('available', checked)}
+                  className="col-span-3 justify-self-start"
+                />
+                {form.formState.errors.available && (
+                  <p className="col-start-2 col-span-3 text-red-500 text-sm">{form.formState.errors.available.message}</p>
+                )}
+              </div>
+              <DialogFooter>
+                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                  {editingItem ? 'Save Changes' : 'Create Item'}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </Layout>
+  );
+};

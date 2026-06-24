@@ -371,3 +371,77 @@ This file tracks each generation attempt.
 - .gitignore
 
 ---
+
+## Attempt 3 — 2026-06-24 [IN PROGRESS]
+
+**Business:** Filament Bar (Baner)
+**Planned Files (67):**
+- backend/src/main/java/com/filamentbarbaner/model/User.java
+- backend/src/main/java/com/filamentbarbaner/model/Role.java
+- backend/src/main/java/com/filamentbarbaner/repository/UserRepository.java
+- backend/src/main/java/com/filamentbarbaner/service/UserService.java
+- backend/src/main/java/com/filamentbarbaner/config/AdminInitializer.java
+- backend/src/main/java/com/filamentbarbaner/exception/GlobalExceptionHandler.java
+- backend/src/main/java/com/filamentbarbaner/dto/ErrorResponse.java
+- backend/src/main/java/com/filamentbarbaner/controller/AuthController.java
+- backend/src/main/java/com/filamentbarbaner/dto/AuthRequest.java
+- backend/src/main/java/com/filamentbarbaner/dto/AuthResponse.java
+- backend/src/main/java/com/filamentbarbaner/util/JwtUtil.java
+- backend/src/main/java/com/filamentbarbaner/security/JwtAuthFilter.java
+- backend/src/main/java/com/filamentbarbaner/config/SecurityConfig.java
+- backend/src/main/java/com/filamentbarbaner/model/MenuItem.java
+- backend/src/main/java/com/filamentbarbaner/model/MenuItemCategory.java
+- backend/src/main/java/com/filamentbarbaner/repository/MenuItemRepository.java
+- backend/src/main/java/com/filamentbarbaner/service/MenuService.java
+- backend/src/main/java/com/filamentbarbaner/controller/MenuController.java
+- backend/src/main/java/com/filamentbarbaner/controller/AdminMenuController.java
+- backend/src/main/java/com/filamentbarbaner/dto/MenuItemDto.java
+- backend/src/main/java/com/filamentbarbaner/model/Reservation.java
+- backend/src/main/java/com/filamentbarbaner/model/ReservationStatus.java
+- backend/src/main/java/com/filamentbarbaner/repository/ReservationRepository.java
+- backend/src/main/java/com/filamentbarbaner/service/ReservationService.java
+- backend/src/main/java/com/filamentbarbaner/controller/ReservationController.java
+- backend/src/main/java/com/filamentbarbaner/controller/AdminReservationController.java
+- backend/src/main/java/com/filamentbarbaner/dto/CreateReservationRequest.java
+- backend/src/main/java/com/filamentbarbaner/dto/ReservationResponse.java
+- backend/src/main/java/com/filamentbarbaner/model/Event.java
+- backend/src/main/java/com/filamentbarbaner/repository/EventRepository.java
+- backend/src/main/java/com/filamentbarbaner/service/EventService.java
+- backend/src/main/java/com/filamentbarbaner/controller/EventController.java
+- backend/src/main/java/com/filamentbarbaner/controller/AdminEventController.java
+- backend/src/main/java/com/filamentbarbaner/dto/EventDto.java
+- frontend/src/api/client.ts
+- frontend/src/App.tsx
+- frontend/src/components/Layout.tsx
+- frontend/src/components/Header.tsx
+- frontend/src/components/Footer.tsx
+- frontend/src/components/Seo.tsx
+- frontend/src/pages/HomePage.tsx
+- frontend/src/pages/ContactPage.tsx
+- frontend/src/context/AuthContext.tsx
+- frontend/src/hooks/useAuth.ts
+- frontend/src/services/authService.ts
+- frontend/src/components/ProtectedRoute.tsx
+- frontend/src/pages/LoginPage.tsx
+- frontend/src/pages/AdminDashboardPage.tsx
+- frontend/src/pages/MenuPage.tsx
+- frontend/src/hooks/useMenu.ts
+- frontend/src/services/menuService.ts
+- frontend/src/pages/AdminMenuPage.tsx
+- frontend/src/services/adminMenuService.ts
+- frontend/src/pages/ReservationPage.tsx
+- frontend/src/hooks/useReservations.ts
+- frontend/src/services/reservationService.ts
+- frontend/src/pages/AdminReservationsPage.tsx
+- frontend/src/services/adminReservationService.ts
+- frontend/src/pages/EventsPage.tsx
+- frontend/src/hooks/useEvents.ts
+- frontend/src/services/eventService.ts
+- frontend/src/pages/AdminEventsPage.tsx
+- frontend/src/services/adminEventService.ts
+- Dockerfile
+- docker-compose.yml
+- .env.example
+- .gitignore
+
+---
